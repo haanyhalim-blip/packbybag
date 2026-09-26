@@ -158,8 +158,20 @@ body.searching .jumps{display:none}
 #mine .it .nm{font-weight:700}
 #mine .it.got .nm{font-weight:400}
 #mine .it.got .nm::after{background:var(--second)}
-#mine .it .rmv{flex:none;margin-left:auto;align-self:center;display:inline-flex;align-items:center;color:#d9534f;cursor:pointer;padding:4px 0 4px 8px;user-select:none;opacity:.8}
-#mine .it .rmv:hover{opacity:1}
+#mine .mrow{display:flex;align-items:center;flex-wrap:wrap;gap:2px 6px;border-bottom:1px dashed var(--line);padding:1px 0}
+#mine .mrow .it{flex:1 1 auto;min-width:0;width:auto;border:0;padding:8px 4px}
+#mine .mrow .it .nm{font-size:1.08rem}
+#mine .it .qty{font-size:.78rem;font-weight:400;color:var(--muted);margin-left:6px}
+#mine .mctl{display:flex;align-items:center;gap:3px;flex:0 1 250px;min-width:0;max-width:100%;margin-left:auto;padding:0 2px 0 0}
+#mine .mctl .qm,#mine .mctl .qp{font:inherit;width:22px;height:22px;border:1px solid #d9d6d0;border-radius:50%;background:#fff;color:#a39a94;cursor:pointer;line-height:1;font-size:.9rem;flex:none;padding:0}
+#mine .mctl .qm:disabled{opacity:.3;cursor:default}
+#mine .mctl .qv{min-width:16px;text-align:center;font-weight:600;color:#958c86;font-size:.85rem;font-variant-numeric:tabular-nums}
+#mine .mctl .qc{flex:1 1 60px;min-width:48px;font:inherit;font-size:.78rem;padding:3px 6px;border:1px solid #d9d6d0;border-radius:6px;background:#fff;color:var(--muted);height:24px;margin-left:4px}
+#mine .mctl .qc:focus{outline:2px solid var(--second);outline-offset:-1px;border-color:transparent;color:var(--ink)}
+#mine .mctl .mv{flex:none;display:inline-flex;align-items:center;color:#a39a94;cursor:pointer;padding:5px 0 5px 4px;text-decoration:none}
+#mine .mctl .mv:hover{color:var(--second-deep)}
+#mine .mctl .rmv{flex:none;display:inline-flex;align-items:center;color:#d9534f;cursor:pointer;padding:5px 0 5px 5px;user-select:none;opacity:.8}
+#mine .mctl .rmv:hover{opacity:1}
 #mine h2.aisle.rm{display:flex;align-items:center;gap:10px;margin-top:12px}
 #mine h2.aisle.rm .ah{flex:1 1 auto;margin:0;background:#ecebe6;border-left-color:var(--faint);color:var(--muted);cursor:pointer}
 #mine h2.aisle.rm .ah .c{display:inline-block;border-color:var(--muted);transform:rotate(-45deg)}
@@ -347,11 +359,11 @@ h2.aisle.rm .ah{color:var(--muted)}
   </div>
 </section>
 
-  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v22</span></p>
+  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v23</span></p>
 </div>
 </div>
 <script>
-var VERSION = 'v22';
+var VERSION = 'v23';
 var CAT = {"clothes":["Underwear","Socks","T-shirts","Tops","Shirts","Trousers","Jeans","Shorts","Skirts","Dresses","Jumper","Hoodie","Jacket","Raincoat","Warm coat","Pyjamas","Swimwear","Belt","Hat","Scarf","Gloves","Gym kit","Sportswear","Smart outfit","Evening outfit","Tights","Bras","Cover-up / sarong","Compression socks","Spare clothes (in hand luggage)"],"shoes":["Trainers","Sandals","Flip-flops","Smart shoes","Walking boots","Comfortable shoes (long days)","Slippers","Water shoes","Heels"],"toiletries":["Toothbrush","Toothpaste","Deodorant","Shampoo","Conditioner","Shower gel","Razor","Shaving foam","Moisturiser","Face wash","Sun cream","After sun","Lip balm","Hairbrush","Hair ties","Hair dryer","Straighteners","Make-up","Make-up remover","Nail clippers","Tweezers","Cotton buds","Sanitary products","Contact lenses","Lens solution","Glasses","Perfume / aftershave","Wet wipes","Tissues","Hand sanitiser","Insect repellent","Wash bag","Travel-size toiletries (under 100 ml)"],"health":["Prescription medicines","Paracetamol","Ibuprofen","Plasters","Blister plasters","Antihistamines","Travel sickness tablets","Rehydration sachets","Antiseptic cream","Diarrhoea tablets","Thermometer","Vitamins","Ear plugs","Eye mask","First aid kit"],"tech":["Phone","Phone charger","Spare phone charger","Power bank","Plug adapter","Laptop","Laptop charger","Tablet","Headphones","Earphones","E-reader","Camera","Camera charger","Memory cards","Smartwatch charger","USB cable","Extension lead / multi-plug","Portable speaker","Kids' tablet","Kids' headphones","Portable mouse","Laptop stand"],"docs":["Passport","Driving licence","Boarding passes","Train / flight tickets","Hotel booking","Event ticket / registration","Travel insurance details","Visa / ETA","Cash (local currency)","Bank cards","Travel card","Car hire booking","Copies of passport","Emergency contacts","Vaccination record","Work ID / badge","House keys","Car keys","Pen (for forms)"],"work":["Laptop bag","Notebook","Pens","Business cards","Presentation on USB","Lanyard","Name badge","Work phone","Suit","Ironed shirts","Ties","Receipts envelope (expenses)","Printouts / running order","Radio / walkie-talkie","Hi-vis vest","Steel-toe boots","Gaffer tape","Cable ties","Scissors","Sharpies","Clipboard","Spare lanyards","Stapler","Sticky labels"],"kids":["Nappies","Baby wipes","Nappy bags","Changing mat","Formula","Bottles","Dummies","Baby food pouches","Kids' snacks","Favourite toy","Comfort blanket","Books","Colouring pens","Activity pack","Car seat","Pushchair / buggy","Baby carrier","Travel cot","Bibs","Kids' sun cream","Armbands","Swim nappies","Kids' medicines","Children's paracetamol","Kids' water bottle","Sticker book","Small surprise for the journey"],"beach":["Beach towel","Beach bag","Sunglasses","Sunhat","Snorkel","Goggles","Bucket and spade","Inflatable","Waterproof phone pouch","Beach shoes","Kids' UV suit","Beach tent / shade"],"journey":["Neck pillow","Travel blanket","Reusable water bottle (empty through security)","Snacks for the journey","Book","Downloaded films","Downloaded playlist / podcasts","Chewing gum","Sick bags","Travel games"],"luggage":["Suitcase","Cabin case","Backpack","Day bag","Packing cubes","Laundry bag","Luggage tags","Luggage scales","Padlock (TSA)","Foldable shopping bag","Umbrella","Dry bag"],"before":["Check passport expiry","Check visa / ETA","Check in online","Download boarding passes","Tell the bank you're travelling","Order currency","Book airport parking / transfer","Arrange pet care","Arrange plant watering","Empty the fridge","Take the bins out","Set heating to holiday mode","Lock windows and doors","Set an out-of-office","Charge everything","Download maps offline","Photograph passport and cards","Buy travel insurance","Save bookings to your phone","Register the trip with the office","Pack medicines in hand luggage","Weigh the suitcase"],"there":["Bottled water","Milk","Bread","Fruit","Local SIM / eSIM","Sun cream (big bottle)","Nappies (big pack)","Snacks","Beer / wine","Washing-up liquid","Toilet roll","Coffee / tea"]};
 var CATS = [["docs","Documents & money"],["tech","Tech & chargers"],["clothes","Clothes"],["shoes","Shoes"],["toiletries","Toiletries"],["health","Health & first aid"],["kids","Kids & babies"],["beach","Beach, pool & sun"],["journey","For the journey"],["work","Work kit"],["luggage","Bags & luggage"],["before","To do before you go"],["there","Get when you're there"],["other","Other"]];
 var BAGS = [["carry","Hand luggage","keep it with you"],["hold","Suitcase","hold luggage"],["wear","Wear on the day",""],["kids","Kids' bags",""],["before","To do before you go",""],["there","Get when you're there","don't pack these"]];
@@ -376,7 +388,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
 
 (function(){
   var KEY = "packbybag-v1";
-  var S = {picked:{}, got:{}, own:[], bag:{}, removed:[]};
+  var S = {picked:{}, got:{}, own:[], bag:{}, removed:[], qty:{}, note:{}};
   var query = "";
   var OKEY = "packbybag-open-v1", OPEN = {docs:1};
   var $ = function(id){ return document.getElementById(id); };
@@ -394,7 +406,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   function doneWord(b){ return b === "before" ? "done" : b === "there" ? "got it" : "packed"; }
 
   function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} if(typeof syncPush === "function") syncPush(); }
-  function load(){ try{ var r = localStorage.getItem(KEY); if(r){ var v = JSON.parse(r); if(v && typeof v === "object"){ S.picked = v.picked || {}; S.got = v.got || {}; S.own = v.own || []; S.bag = v.bag || {}; S.removed = v.removed || []; } } }catch(e){}
+  function load(){ try{ var r = localStorage.getItem(KEY); if(r){ var v = JSON.parse(r); if(v && typeof v === "object"){ S.picked = v.picked || {}; S.got = v.got || {}; S.own = v.own || []; S.bag = v.bag || {}; S.removed = v.removed || []; S.qty = v.qty || {}; S.note = v.note || {}; } } }catch(e){}
     try{ var o = localStorage.getItem(OKEY); if(o) OPEN = JSON.parse(o) || OPEN; }catch(e){}
     S.own.forEach(function(o){ if(!CATS.some(function(a){ return a[0] === o.a; })) o.a = classify(o.n); if(!bagLabel[o.b]) o.b = BAGOF[o.a] || "hold"; }); }
   function saveOpen(){ try{ localStorage.setItem(OKEY, JSON.stringify(OPEN)); }catch(e){} }
@@ -413,14 +425,23 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   }
   function asText(){
     var lines = [];
-    chosen().forEach(function(g){ lines.push(g.label.toUpperCase() + (g.sub ? " – " + g.sub : "")); g.rows.forEach(function(r){ lines.push((r.got ? "☑ " : "☐ ") + r.n); }); lines.push(""); });
+    chosen().forEach(function(g){ lines.push(g.label.toUpperCase() + (g.sub ? " – " + g.sub : "")); g.rows.forEach(function(r){ var t = noteText(r.n); lines.push((r.got ? "☑ " : "☐ ") + r.n + (t ? " – " + t : "")); }); lines.push(""); });
     return lines.join("\n").trim();
   }
   var RMV = '<span class="rmv" role="button" title="Take off the list" aria-label="Remove"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6.4" fill="none" stroke="currentColor" stroke-width="1.7"/><line x1="3.7" y1="3.7" x2="12.3" y2="12.3" stroke="currentColor" stroke-width="1.7"/></svg></span>';
   function bagTag(b, mine){ return mine ? '<small><span class="mv bag" role="button">change bag</span></small>' : '<span class="bag" role="button" title="Change bag">'+esc(bagLabel[b])+'</span>'; }
   function itemBtn(it, showCat, mine){ var on = !!S.picked[it.n], got = on && !!S.got[it.n], b = bagOf(it);
-    return '<button class="it'+(got?" got":"")+'" data-n="'+esc(it.n)+'" aria-pressed="'+(mine ? got : on)+'"><span class="box"></span><span><span class="nm" data-done="'+doneWord(b)+'">'+esc(it.n)+'</span>'+(on ? bagTag(b, mine) : '')+(showCat ? '<small class="al">'+esc(label[it.a])+'</small>' : '')+'</span>'+(mine ? RMV : '')+'</button>'; }
-  function ownBtn(o, i, showCat, mine){ return '<button class="it own'+(o.got?" got":"")+'" data-own="'+i+'" aria-pressed="'+(mine ? !!o.got : true)+'"><span class="box"></span><span><span class="nm" data-done="'+doneWord(o.b)+'">'+esc(o.n)+'</span>'+(mine ? '<small><span class="by">added by you · </span><span class="mv bag" role="button">change bag</span></small>' : '<span class="bag" role="button" title="Change bag">'+esc(bagLabel[o.b])+'</span><small><span class="by">added by you</span></small>')+(showCat ? '<small class="al">'+esc(label[o.a])+'</small>' : '')+'</span>'+(mine ? RMV : '')+'</button>'; }
+    return '<button class="it'+(got?" got":"")+'" data-n="'+esc(it.n)+'" aria-pressed="'+(mine ? got : on)+'"><span class="box"></span><span><span class="nm" data-done="'+doneWord(b)+'">'+esc(it.n)+'</span>'+(on ? bagTag(b, mine) : '')+(showCat ? '<small class="al">'+esc(label[it.a])+'</small>' : '')+'</span></button>'; }
+  function ownBtn(o, i, showCat, mine){ return '<button class="it own'+(o.got?" got":"")+'" data-own="'+i+'" aria-pressed="'+(mine ? !!o.got : true)+'"><span class="box"></span><span><span class="nm" data-done="'+doneWord(o.b)+'">'+esc(o.n)+'</span>'+(mine ? '<small><span class="by">added by you · </span><span class="mv bag" role="button">change bag</span></small>' : '<span class="bag" role="button" title="Change bag">'+esc(bagLabel[o.b])+'</span><small><span class="by">added by you</span></small>')+(showCat ? '<small class="al">'+esc(label[o.a])+'</small>' : '')+'</span></button>'; }
+
+  var MV = '<span class="mv" role="button" title="Change bag" aria-label="Change bag"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h11M10 2.5l3 3-3 3"/><path d="M14 10.5H3M6 7.5l-3 3 3 3"/></svg></span>';
+  function noteText(n){ var q = (S.qty || {})[n] || "", c = (S.note || {})[n] || "", parts = []; if(q && q !== "1") parts.push("× " + q); if(c) parts.push(c); return parts.join(" · "); }
+  function noteTag(n){ var t = noteText(n); return t ? '<span class="qty">'+esc(t)+'</span>' : ''; }
+  function ctl(n, ref){ var q = parseInt((S.qty || {})[n], 10) || 1, c = (S.note || {})[n] || ""; return '<div class="mctl" '+ref+'><button type="button" class="qm" aria-label="One fewer"'+(q <= 1 ? ' disabled' : '')+'>&minus;</button><span class="qv" aria-label="Quantity">'+q+'</span><button type="button" class="qp" aria-label="One more">+</button><input class="qc" type="text" maxlength="60" value="'+esc(c)+'" aria-label="Comment">'+MV+RMV+'</div>'; }
+  function mineRow(n, ref, got, cls, b){ return '<div class="mrow'+(got?" got":"")+'"><button class="it'+cls+(got?" got":"")+'" '+ref+' aria-pressed="'+got+'"><span class="box"></span><span><span class="nm" data-done="'+doneWord(b)+'">'+esc(n)+'</span>'+(got ? noteTag(n) : '')+'</span></button>'+(got ? '' : ctl(n, ref))+'</div>'; }
+  function mineBtn(it){ return mineRow(it.n, 'data-n="'+esc(it.n)+'"', !!S.got[it.n], '', bagOf(it)); }
+  function mineOwn(o, i){ return mineRow(o.n, 'data-own="'+i+'"', !!o.got, ' own', o.b); }
+  function ctlKey(c){ return c.dataset.own !== undefined ? ((S.own[+c.dataset.own] || {}).n || "") : c.dataset.n; }
 
   function draw(mine){
     var q = mine ? "" : norm(query), html = "", shown = 0;
@@ -446,8 +467,8 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
       chosen().forEach(function(g){
         shown += g.rows.length;
         html += '<h2 class="aisle"><button class="ah" data-a="'+g.key+'"><span class="c"></span>'+esc(g.label)+(g.sub ? ' <span class="sub">– '+esc(g.sub)+'</span>' : '')+'</button></h2><div class="grid">';
-        items.forEach(function(it){ if(S.picked[it.n] && bagOf(it) === g.key) html += itemBtn(it, false, true); });
-        S.own.forEach(function(o, i){ if(o.b === g.key) html += ownBtn(o, i, false, true); });
+        items.forEach(function(it){ if(S.picked[it.n] && bagOf(it) === g.key) html += mineBtn(it); });
+        S.own.forEach(function(o, i){ if(o.b === g.key) html += mineOwn(o, i); });
         html += '</div>';
       });
       if(S.removed.length){
@@ -499,7 +520,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     document.querySelectorAll(".toast").forEach(function(x){ x.remove(); }); document.body.appendChild(d); setTimeout(function(){ d.remove(); }, undo ? 6000 : 2400); }
   function takeOff(b){ var r; if(b.dataset.own !== undefined){ var o = S.own[+b.dataset.own]; if(!o) return; r = {n:o.n, own:{a:o.a, b:o.b}}; S.own.splice(+b.dataset.own, 1); }
     else { r = {n:b.dataset.n}; delete S.picked[r.n]; delete S.got[r.n]; }
-    park(r); save(); render();
+    if(S.note) delete S.note[r.n]; if(S.qty) delete S.qty[r.n]; park(r); save(); render();
     toast(r.n + " taken off – it's in Taken off at the bottom", function(){ unpark(r.n); if(r.own){ if(!S.own.some(function(o){ return norm(o.n) === norm(r.n); })) S.own.push({n:r.n, a:r.own.a, b:r.own.b, got:false}); } else { S.picked[r.n] = 1; delete S.got[r.n]; } save(); render(); }); }
 
   function addOne(v){
@@ -623,6 +644,12 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   }
   $("out").addEventListener("input", catBar); $("out").addEventListener("keydown", catBar); $("out").addEventListener("click", catBar);
   function onListClick(e){
+    var mc = e.target.closest(".mctl");
+    if(mc){ e.stopPropagation(); var rb = mc.closest(".mrow").querySelector(".it"); if(!rb) return;
+      if(e.target.closest(".rmv")){ takeOff(rb); return; }
+      if(e.target.closest(".mv")){ var mn = ctlKey(mc); if(mn){ askBag([mn], true); $("sortbox").scrollIntoView({block:"center"}); } return; }
+      var bq = e.target.closest(".qm, .qp"); if(!bq) return; var kn = ctlKey(mc); if(!kn) return; S.qty = S.qty || {};
+      var cur = parseInt(S.qty[kn], 10) || 1, nx = Math.max(1, cur + (bq.classList.contains("qp") ? 1 : -1)); if(nx === 1) delete S.qty[kn]; else S.qty[kn] = String(nx); save(); render(); return; }
     if(e.target.closest(".qaddb")){ addTyped($("q").value); return; }
     if(e.target.closest(".addrow")) { e.stopPropagation(); return; }
     var gl = e.target.closest(".golist");
@@ -636,9 +663,8 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     if(b.dataset.rm !== undefined){ restore(+b.dataset.rm); return; }
     if(e.target.closest(".bag")){ e.stopPropagation();
       var nm = b.dataset.own !== undefined ? (S.own[+b.dataset.own] || {}).n : b.dataset.n; if(!nm) return;
-      if(b.closest("#mine")) closeMine(); askBag([nm]); $("sortbox").scrollIntoView({block:"center"}); return; }
+      if(b.closest("#mine")) closeMine(); askBag([nm], true); $("sortbox").scrollIntoView({block:"center"}); return; }
     var inMine = !!b.closest("#mine");
-    if(inMine && e.target.closest(".rmv")){ e.stopPropagation(); takeOff(b); return; }
     if(b.dataset.own !== undefined){ var oi = +b.dataset.own, o = S.own[oi]; if(o){ if(inMine){ o.got = !o.got; save(); render(); } else takeOff(b); } return; }
     var n = b.dataset.n, wasSearch = !!query.trim() && !inMine;
     if(inMine){ if(S.got[n]) delete S.got[n]; else S.got[n] = 1; save(); render(); return; }
@@ -647,6 +673,8 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     save(); render();
   }
   $("out").addEventListener("click", onListClick); $("mine").addEventListener("click", onListClick);
+  $("mine").addEventListener("input", function(e){ var i = e.target.closest(".qc"); if(!i) return; var n = ctlKey(i.closest(".mctl")); if(!n) return; S.note = S.note || {}; var v = i.value.trim(); if(v) S.note[n] = v; else delete S.note[n]; save(); $("paper").textContent = nPicked() ? asText() : "Nothing on the list yet"; });
+  $("mine").addEventListener("keydown", function(e){ if(e.target.closest(".qc") && e.key === "Enter"){ e.preventDefault(); e.target.blur(); } });
   $("q").addEventListener("input", function(){ var was = !!query.trim(), now = !!this.value.trim(); query = this.value; $("qClear").hidden = !now; document.body.classList.toggle("searching", now); render(); if(now && !was){ var st = document.querySelector(".sticky"); window.scrollTo({top: st.offsetTop, behavior: "auto"}); } });
   window.addEventListener("scroll", function(){ $("toTop").hidden = window.pageYOffset < 320; }, {passive:true});
   $("toTop").addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
@@ -654,7 +682,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   function clearSearch(){ query = ""; $("q").value = ""; $("qClear").hidden = true; document.body.classList.remove("searching"); render(); }
   $("qClear").addEventListener("click", function(){ clearSearch(); $("q").focus(); });
   $("q").addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); if(splitRaw(this.value).length > 1) addTyped(this.value); else this.blur(); } });
-  function clearAll(){ if(!nPicked()) return; if(!confirm("Start a new trip? This clears the whole list.")) return; S = {picked:{}, got:{}, own:[], bag:{}, removed:[]}; save(); render(); toast("Cleared – ready for the next trip"); }
+  function clearAll(){ if(!nPicked()) return; if(!confirm("Start a new trip? This clears the whole list.")) return; S = {picked:{}, got:{}, own:[], bag:{}, removed:[], qty:{}, note:{}}; save(); render(); toast("Cleared – ready for the next trip"); }
   $("clear").addEventListener("click", clearAll);
   $("copy").addEventListener("click", function(){
     var t = asText(); if(!t) return;
@@ -724,22 +752,22 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   function rpc(fn, body){ return fetch(SB_URL + "/rest/v1/rpc/" + fn, {method:"POST", headers:sbHeaders(), body:JSON.stringify(body)}).then(function(r){ if(!r.ok) throw new Error("rpc " + r.status); return r.text(); }).then(function(t){ return t ? JSON.parse(t) : null; }); }
   function newCode(){ var a = "abcdefghjkmnpqrstuvwxyz23456789", o = "", c = new Uint32Array(12); (window.crypto || {}).getRandomValues ? crypto.getRandomValues(c) : c.forEach(function(_, i){ c[i] = Math.random() * 1e9; }); for(var i = 0; i < 12; i++) o += a[c[i] % a.length]; return "p" + o.slice(1); }
   function shareUrl(){ return "https://packbybag.com/#l=" + CODE; }
-  function snapshot(){ return JSON.stringify({picked:S.picked, got:S.got, own:S.own, bag:S.bag, removed:S.removed}); }
+  function snapshot(){ return JSON.stringify({picked:S.picked, got:S.got, own:S.own, bag:S.bag, removed:S.removed, qty:S.qty || {}, note:S.note || {}}); }
   var lastT = 0, BKEY = "packbybag-backup-v1";
   function countOf(d){ return Object.keys(d.picked || {}).length + (d.own || []).length; }
-  function mergeInto(d){ var r = {picked:Object.assign({}, d.picked || {}, S.picked || {}), got:Object.assign({}, d.got || {}, S.got || {}), bag:Object.assign({}, d.bag || {}, S.bag || {}), own:(d.own || []).slice(), removed:(d.removed || []).slice()};
+  function mergeInto(d){ var r = {picked:Object.assign({}, d.picked || {}, S.picked || {}), got:Object.assign({}, d.got || {}, S.got || {}), bag:Object.assign({}, d.bag || {}, S.bag || {}), qty:Object.assign({}, d.qty || {}, S.qty || {}), note:Object.assign({}, d.note || {}, S.note || {}), own:(d.own || []).slice(), removed:(d.removed || []).slice()};
     S.own.forEach(function(o){ if(!r.own.some(function(x){ return norm(x.n) === norm(o.n); })) r.own.push(o); }); return r; }
   function applyRemote(d, viaJoin){ if(!d || typeof d !== "object") return;
     if(d.t && d.t < lastT) return;
     var here = countOf(S), there = countOf(d);
     if(!there && here){ lastSent = ""; syncPush(true); return; }
     var merged = false; if(viaJoin && here && there){ d = mergeInto(d); merged = true; }
-    var j = JSON.stringify({picked:d.picked || {}, got:d.got || {}, own:d.own || [], bag:d.bag || {}, removed:d.removed || []}); if(j === snapshot()) return;
+    var j = JSON.stringify({picked:d.picked || {}, got:d.got || {}, own:d.own || [], bag:d.bag || {}, removed:d.removed || [], qty:d.qty || {}, note:d.note || {}}); if(j === snapshot()) return;
     var before = snapshot(), lost = here - there;
     try{ localStorage.setItem(BKEY, before); }catch(e){}
-    applying = true; S.picked = d.picked || {}; S.got = d.got || {}; S.own = d.own || []; S.bag = d.bag || {}; S.removed = d.removed || []; if(d.t) lastT = d.t; try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} lastSent = snapshot(); render(); applying = false;
+    applying = true; S.picked = d.picked || {}; S.got = d.got || {}; S.own = d.own || []; S.bag = d.bag || {}; S.removed = d.removed || []; S.qty = d.qty || {}; S.note = d.note || {}; if(d.t) lastT = d.t; try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} lastSent = snapshot(); render(); applying = false;
     if(merged){ lastSent = ""; syncPush(true); }
-    if(!viaJoin && lost > 0){ toast("List updated from the shared link (" + lost + " fewer)", function(){ try{ var b = JSON.parse(before); applying = true; S.picked = b.picked || {}; S.got = b.got || {}; S.own = b.own || []; S.bag = b.bag || {}; S.removed = b.removed || []; applying = false; save(); render(); lastSent = ""; syncPush(true); }catch(e){} }); } }
+    if(!viaJoin && lost > 0){ toast("List updated from the shared link (" + lost + " fewer)", function(){ try{ var b = JSON.parse(before); applying = true; S.picked = b.picked || {}; S.got = b.got || {}; S.own = b.own || []; S.bag = b.bag || {}; S.removed = b.removed || []; S.qty = b.qty || {}; S.note = b.note || {}; applying = false; save(); render(); lastSent = ""; syncPush(true); }catch(e){} }); } }
   function syncPush(now){ if(!CODE || applying) return; clearTimeout(pushT); var go = function(){
     var j = snapshot(); if(j === lastSent) return; lastSent = j; lastT = Date.now(); var payload = JSON.parse(j); payload.t = lastT;
     rpc("save_list", {code:CODE, payload:payload}).catch(function(){ lastSent = ""; });
