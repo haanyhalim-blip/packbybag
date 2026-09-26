@@ -158,6 +158,8 @@ body.searching .jumps{display:none}
 #mine .it .nm{font-weight:700}
 #mine .it.got .nm{font-weight:400}
 #mine .it.got .nm::after{background:var(--second)}
+#mine .it .rmv{flex:none;margin-left:auto;align-self:center;display:inline-flex;align-items:center;color:#d9534f;cursor:pointer;padding:4px 0 4px 8px;user-select:none;opacity:.8}
+#mine .it .rmv:hover{opacity:1}
 #mine h2.aisle.rm{display:flex;align-items:center;gap:10px;margin-top:12px}
 #mine h2.aisle.rm .ah{flex:1 1 auto;margin:0;background:#ecebe6;border-left-color:var(--faint);color:var(--muted);cursor:pointer}
 #mine h2.aisle.rm .ah .c{display:inline-block;border-color:var(--muted);transform:rotate(-45deg)}
@@ -345,11 +347,11 @@ h2.aisle.rm .ah{color:var(--muted)}
   </div>
 </section>
 
-  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v21</span></p>
+  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v22</span></p>
 </div>
 </div>
 <script>
-var VERSION = 'v21';
+var VERSION = 'v22';
 var CAT = {"clothes":["Underwear","Socks","T-shirts","Tops","Shirts","Trousers","Jeans","Shorts","Skirts","Dresses","Jumper","Hoodie","Jacket","Raincoat","Warm coat","Pyjamas","Swimwear","Belt","Hat","Scarf","Gloves","Gym kit","Sportswear","Smart outfit","Evening outfit","Tights","Bras","Cover-up / sarong","Compression socks","Spare clothes (in hand luggage)"],"shoes":["Trainers","Sandals","Flip-flops","Smart shoes","Walking boots","Comfortable shoes (long days)","Slippers","Water shoes","Heels"],"toiletries":["Toothbrush","Toothpaste","Deodorant","Shampoo","Conditioner","Shower gel","Razor","Shaving foam","Moisturiser","Face wash","Sun cream","After sun","Lip balm","Hairbrush","Hair ties","Hair dryer","Straighteners","Make-up","Make-up remover","Nail clippers","Tweezers","Cotton buds","Sanitary products","Contact lenses","Lens solution","Glasses","Perfume / aftershave","Wet wipes","Tissues","Hand sanitiser","Insect repellent","Wash bag","Travel-size toiletries (under 100 ml)"],"health":["Prescription medicines","Paracetamol","Ibuprofen","Plasters","Blister plasters","Antihistamines","Travel sickness tablets","Rehydration sachets","Antiseptic cream","Diarrhoea tablets","Thermometer","Vitamins","Ear plugs","Eye mask","First aid kit"],"tech":["Phone","Phone charger","Spare phone charger","Power bank","Plug adapter","Laptop","Laptop charger","Tablet","Headphones","Earphones","E-reader","Camera","Camera charger","Memory cards","Smartwatch charger","USB cable","Extension lead / multi-plug","Portable speaker","Kids' tablet","Kids' headphones","Portable mouse","Laptop stand"],"docs":["Passport","Driving licence","Boarding passes","Train / flight tickets","Hotel booking","Event ticket / registration","Travel insurance details","Visa / ETA","Cash (local currency)","Bank cards","Travel card","Car hire booking","Copies of passport","Emergency contacts","Vaccination record","Work ID / badge","House keys","Car keys","Pen (for forms)"],"work":["Laptop bag","Notebook","Pens","Business cards","Presentation on USB","Lanyard","Name badge","Work phone","Suit","Ironed shirts","Ties","Receipts envelope (expenses)","Printouts / running order","Radio / walkie-talkie","Hi-vis vest","Steel-toe boots","Gaffer tape","Cable ties","Scissors","Sharpies","Clipboard","Spare lanyards","Stapler","Sticky labels"],"kids":["Nappies","Baby wipes","Nappy bags","Changing mat","Formula","Bottles","Dummies","Baby food pouches","Kids' snacks","Favourite toy","Comfort blanket","Books","Colouring pens","Activity pack","Car seat","Pushchair / buggy","Baby carrier","Travel cot","Bibs","Kids' sun cream","Armbands","Swim nappies","Kids' medicines","Children's paracetamol","Kids' water bottle","Sticker book","Small surprise for the journey"],"beach":["Beach towel","Beach bag","Sunglasses","Sunhat","Snorkel","Goggles","Bucket and spade","Inflatable","Waterproof phone pouch","Beach shoes","Kids' UV suit","Beach tent / shade"],"journey":["Neck pillow","Travel blanket","Reusable water bottle (empty through security)","Snacks for the journey","Book","Downloaded films","Downloaded playlist / podcasts","Chewing gum","Sick bags","Travel games"],"luggage":["Suitcase","Cabin case","Backpack","Day bag","Packing cubes","Laundry bag","Luggage tags","Luggage scales","Padlock (TSA)","Foldable shopping bag","Umbrella","Dry bag"],"before":["Check passport expiry","Check visa / ETA","Check in online","Download boarding passes","Tell the bank you're travelling","Order currency","Book airport parking / transfer","Arrange pet care","Arrange plant watering","Empty the fridge","Take the bins out","Set heating to holiday mode","Lock windows and doors","Set an out-of-office","Charge everything","Download maps offline","Photograph passport and cards","Buy travel insurance","Save bookings to your phone","Register the trip with the office","Pack medicines in hand luggage","Weigh the suitcase"],"there":["Bottled water","Milk","Bread","Fruit","Local SIM / eSIM","Sun cream (big bottle)","Nappies (big pack)","Snacks","Beer / wine","Washing-up liquid","Toilet roll","Coffee / tea"]};
 var CATS = [["docs","Documents & money"],["tech","Tech & chargers"],["clothes","Clothes"],["shoes","Shoes"],["toiletries","Toiletries"],["health","Health & first aid"],["kids","Kids & babies"],["beach","Beach, pool & sun"],["journey","For the journey"],["work","Work kit"],["luggage","Bags & luggage"],["before","To do before you go"],["there","Get when you're there"],["other","Other"]];
 var BAGS = [["carry","Hand luggage","keep it with you"],["hold","Suitcase","hold luggage"],["wear","Wear on the day",""],["kids","Kids' bags",""],["before","To do before you go",""],["there","Get when you're there","don't pack these"]];
@@ -414,10 +416,11 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     chosen().forEach(function(g){ lines.push(g.label.toUpperCase() + (g.sub ? " – " + g.sub : "")); g.rows.forEach(function(r){ lines.push((r.got ? "☑ " : "☐ ") + r.n); }); lines.push(""); });
     return lines.join("\n").trim();
   }
+  var RMV = '<span class="rmv" role="button" title="Take off the list" aria-label="Remove"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6.4" fill="none" stroke="currentColor" stroke-width="1.7"/><line x1="3.7" y1="3.7" x2="12.3" y2="12.3" stroke="currentColor" stroke-width="1.7"/></svg></span>';
   function bagTag(b, mine){ return mine ? '<small><span class="mv bag" role="button">change bag</span></small>' : '<span class="bag" role="button" title="Change bag">'+esc(bagLabel[b])+'</span>'; }
   function itemBtn(it, showCat, mine){ var on = !!S.picked[it.n], got = on && !!S.got[it.n], b = bagOf(it);
-    return '<button class="it'+(got?" got":"")+'" data-n="'+esc(it.n)+'" aria-pressed="'+(mine ? got : on)+'"><span class="box"></span><span><span class="nm" data-done="'+doneWord(b)+'">'+esc(it.n)+'</span>'+(on ? bagTag(b, mine) : '')+(showCat ? '<small class="al">'+esc(label[it.a])+'</small>' : '')+'</span></button>'; }
-  function ownBtn(o, i, showCat, mine){ return '<button class="it own'+(o.got?" got":"")+'" data-own="'+i+'" aria-pressed="'+(mine ? !!o.got : true)+'"><span class="box"></span><span><span class="nm" data-done="'+doneWord(o.b)+'">'+esc(o.n)+'</span>'+(mine ? '<small><span class="by">added by you · </span><span class="mv bag" role="button">change bag</span></small>' : '<span class="bag" role="button" title="Change bag">'+esc(bagLabel[o.b])+'</span><small><span class="by">added by you</span></small>')+(showCat ? '<small class="al">'+esc(label[o.a])+'</small>' : '')+'</span></button>'; }
+    return '<button class="it'+(got?" got":"")+'" data-n="'+esc(it.n)+'" aria-pressed="'+(mine ? got : on)+'"><span class="box"></span><span><span class="nm" data-done="'+doneWord(b)+'">'+esc(it.n)+'</span>'+(on ? bagTag(b, mine) : '')+(showCat ? '<small class="al">'+esc(label[it.a])+'</small>' : '')+'</span>'+(mine ? RMV : '')+'</button>'; }
+  function ownBtn(o, i, showCat, mine){ return '<button class="it own'+(o.got?" got":"")+'" data-own="'+i+'" aria-pressed="'+(mine ? !!o.got : true)+'"><span class="box"></span><span><span class="nm" data-done="'+doneWord(o.b)+'">'+esc(o.n)+'</span>'+(mine ? '<small><span class="by">added by you · </span><span class="mv bag" role="button">change bag</span></small>' : '<span class="bag" role="button" title="Change bag">'+esc(bagLabel[o.b])+'</span><small><span class="by">added by you</span></small>')+(showCat ? '<small class="al">'+esc(label[o.a])+'</small>' : '')+'</span>'+(mine ? RMV : '')+'</button>'; }
 
   function draw(mine){
     var q = mine ? "" : norm(query), html = "", shown = 0;
@@ -448,7 +451,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
         html += '</div>';
       });
       if(S.removed.length){
-        var ropen = OPEN._removed !== 0;
+        var ropen = OPEN._removed === 1;
         html += '<h2 class="aisle rm"><button class="ah" data-a="_removed" aria-expanded="'+ropen+'"><span class="c"></span>Taken off <span class="sub">('+S.removed.length+')</span></button><button class="link quiet" id="rmForget" type="button">Clear</button></h2><div class="grid"'+(ropen ? '' : ' hidden')+'>';
         S.removed.forEach(function(r, i){ html += '<button class="it rm" data-rm="'+i+'"><span class="box"></span><span><span class="nm">'+esc(r.n)+'</span></span></button>'; });
         html += '</div>';
@@ -497,7 +500,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   function takeOff(b){ var r; if(b.dataset.own !== undefined){ var o = S.own[+b.dataset.own]; if(!o) return; r = {n:o.n, own:{a:o.a, b:o.b}}; S.own.splice(+b.dataset.own, 1); }
     else { r = {n:b.dataset.n}; delete S.picked[r.n]; delete S.got[r.n]; }
     park(r); save(); render();
-    toast(r.n + " moved to Taken off", function(){ unpark(r.n); if(r.own){ if(!S.own.some(function(o){ return norm(o.n) === norm(r.n); })) S.own.push({n:r.n, a:r.own.a, b:r.own.b, got:false}); } else { S.picked[r.n] = 1; delete S.got[r.n]; } save(); render(); }); }
+    toast(r.n + " taken off – it's in Taken off at the bottom", function(){ unpark(r.n); if(r.own){ if(!S.own.some(function(o){ return norm(o.n) === norm(r.n); })) S.own.push({n:r.n, a:r.own.a, b:r.own.b, got:false}); } else { S.picked[r.n] = 1; delete S.got[r.n]; } save(); render(); }); }
 
   function addOne(v){
     v = v.trim().replace(/^[-*\u2022\u2610\u2611\u2612\[\]x ]+/i, "").replace(/^\d+\s*x?\s+/i, "").trim(); if(!v) return false;
@@ -627,7 +630,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     var h = e.target.closest(".ah");
     if(e.target.closest(".clearbtn")){ clearAll(); return; }
     if(e.target.closest("#rmForget")){ if(confirm("Clear the taken-off list?")){ S.removed = []; save(); render(); } return; }
-    if(h){ var k = h.dataset.a; if(k === "_removed"){ OPEN._removed = OPEN._removed === 0 ? 1 : 0; } else { if(query || h.closest("#mine")) return; if(OPEN[k]) delete OPEN[k]; else OPEN[k] = 1; }
+    if(h){ var k = h.dataset.a; if(k === "_removed"){ OPEN._removed = OPEN._removed === 1 ? 0 : 1; } else { if(query || h.closest("#mine")) return; if(OPEN[k]) delete OPEN[k]; else OPEN[k] = 1; }
       saveOpen(); render(); return; }
     var b = e.target.closest(".it"); if(!b) return;
     if(b.dataset.rm !== undefined){ restore(+b.dataset.rm); return; }
@@ -635,10 +638,10 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
       var nm = b.dataset.own !== undefined ? (S.own[+b.dataset.own] || {}).n : b.dataset.n; if(!nm) return;
       if(b.closest("#mine")) closeMine(); askBag([nm]); $("sortbox").scrollIntoView({block:"center"}); return; }
     var inMine = !!b.closest("#mine");
-    if(b.dataset.own !== undefined){ var oi = +b.dataset.own, o = S.own[oi]; if(o){ if(inMine && !o.got){ o.got = true; save(); render(); } else takeOff(b); } return; }
+    if(inMine && e.target.closest(".rmv")){ e.stopPropagation(); takeOff(b); return; }
+    if(b.dataset.own !== undefined){ var oi = +b.dataset.own, o = S.own[oi]; if(o){ if(inMine){ o.got = !o.got; save(); render(); } else takeOff(b); } return; }
     var n = b.dataset.n, wasSearch = !!query.trim() && !inMine;
-    if(inMine && !S.got[n]){ S.got[n] = 1; save(); render(); return; }
-    if(inMine){ takeOff(b); return; }
+    if(inMine){ if(S.got[n]) delete S.got[n]; else S.got[n] = 1; save(); render(); return; }
     if(!S.picked[n]){ S.picked[n] = 1; unpark(n); if(wasSearch){ save(); clearSearch(); openMine(); toast(n + " – on your list, " + bagLabel[bagOf(byNorm[norm(n)])]); return; } }
     else { takeOff(b); return; }
     save(); render();
