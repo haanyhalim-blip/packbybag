@@ -200,6 +200,12 @@ body.searching .jumps{display:none}
 .paste p{margin:0 0 8px;font-size:.9rem;color:var(--muted)}
 .sortbox{border-color:var(--second);background:var(--second-wash)}
 .sortbox p{color:var(--ink)}
+.chg-t{display:block;font-size:1.05rem;color:var(--second-deep)}
+.chg-n{display:block;font-size:1.25rem;font-weight:800;margin:2px 0 6px}
+.chg-r{display:flex;align-items:center;gap:12px;padding:7px 0;border-top:1px dashed var(--line)}
+.chg-l{flex:0 0 95px;font-size:.85rem;color:var(--muted)}
+.chg-v{font-weight:700}
+.chg-r select{flex:1 1 auto;font:inherit;font-size:.95rem;padding:8px 10px;border:1.5px solid var(--second);border-radius:9px;background:#fff;color:var(--ink);min-width:0}
 .srow{display:flex;align-items:center;gap:10px;padding:6px 0;flex-wrap:wrap}
 .srow b{flex:1 1 120px}
 .srow select{font:inherit;font-size:.92rem;padding:8px 10px;border:1.5px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);max-width:100%}
@@ -359,11 +365,11 @@ h2.aisle.rm .ah{color:var(--muted)}
   </div>
 </section>
 
-  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v23</span></p>
+  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v24</span></p>
 </div>
 </div>
 <script>
-var VERSION = 'v23';
+var VERSION = 'v24';
 var CAT = {"clothes":["Underwear","Socks","T-shirts","Tops","Shirts","Trousers","Jeans","Shorts","Skirts","Dresses","Jumper","Hoodie","Jacket","Raincoat","Warm coat","Pyjamas","Swimwear","Belt","Hat","Scarf","Gloves","Gym kit","Sportswear","Smart outfit","Evening outfit","Tights","Bras","Cover-up / sarong","Compression socks","Spare clothes (in hand luggage)"],"shoes":["Trainers","Sandals","Flip-flops","Smart shoes","Walking boots","Comfortable shoes (long days)","Slippers","Water shoes","Heels"],"toiletries":["Toothbrush","Toothpaste","Deodorant","Shampoo","Conditioner","Shower gel","Razor","Shaving foam","Moisturiser","Face wash","Sun cream","After sun","Lip balm","Hairbrush","Hair ties","Hair dryer","Straighteners","Make-up","Make-up remover","Nail clippers","Tweezers","Cotton buds","Sanitary products","Contact lenses","Lens solution","Glasses","Perfume / aftershave","Wet wipes","Tissues","Hand sanitiser","Insect repellent","Wash bag","Travel-size toiletries (under 100 ml)"],"health":["Prescription medicines","Paracetamol","Ibuprofen","Plasters","Blister plasters","Antihistamines","Travel sickness tablets","Rehydration sachets","Antiseptic cream","Diarrhoea tablets","Thermometer","Vitamins","Ear plugs","Eye mask","First aid kit"],"tech":["Phone","Phone charger","Spare phone charger","Power bank","Plug adapter","Laptop","Laptop charger","Tablet","Headphones","Earphones","E-reader","Camera","Camera charger","Memory cards","Smartwatch charger","USB cable","Extension lead / multi-plug","Portable speaker","Kids' tablet","Kids' headphones","Portable mouse","Laptop stand"],"docs":["Passport","Driving licence","Boarding passes","Train / flight tickets","Hotel booking","Event ticket / registration","Travel insurance details","Visa / ETA","Cash (local currency)","Bank cards","Travel card","Car hire booking","Copies of passport","Emergency contacts","Vaccination record","Work ID / badge","House keys","Car keys","Pen (for forms)"],"work":["Laptop bag","Notebook","Pens","Business cards","Presentation on USB","Lanyard","Name badge","Work phone","Suit","Ironed shirts","Ties","Receipts envelope (expenses)","Printouts / running order","Radio / walkie-talkie","Hi-vis vest","Steel-toe boots","Gaffer tape","Cable ties","Scissors","Sharpies","Clipboard","Spare lanyards","Stapler","Sticky labels"],"kids":["Nappies","Baby wipes","Nappy bags","Changing mat","Formula","Bottles","Dummies","Baby food pouches","Kids' snacks","Favourite toy","Comfort blanket","Books","Colouring pens","Activity pack","Car seat","Pushchair / buggy","Baby carrier","Travel cot","Bibs","Kids' sun cream","Armbands","Swim nappies","Kids' medicines","Children's paracetamol","Kids' water bottle","Sticker book","Small surprise for the journey"],"beach":["Beach towel","Beach bag","Sunglasses","Sunhat","Snorkel","Goggles","Bucket and spade","Inflatable","Waterproof phone pouch","Beach shoes","Kids' UV suit","Beach tent / shade"],"journey":["Neck pillow","Travel blanket","Reusable water bottle (empty through security)","Snacks for the journey","Book","Downloaded films","Downloaded playlist / podcasts","Chewing gum","Sick bags","Travel games"],"luggage":["Suitcase","Cabin case","Backpack","Day bag","Packing cubes","Laundry bag","Luggage tags","Luggage scales","Padlock (TSA)","Foldable shopping bag","Umbrella","Dry bag"],"before":["Check passport expiry","Check visa / ETA","Check in online","Download boarding passes","Tell the bank you're travelling","Order currency","Book airport parking / transfer","Arrange pet care","Arrange plant watering","Empty the fridge","Take the bins out","Set heating to holiday mode","Lock windows and doors","Set an out-of-office","Charge everything","Download maps offline","Photograph passport and cards","Buy travel insurance","Save bookings to your phone","Register the trip with the office","Pack medicines in hand luggage","Weigh the suitcase"],"there":["Bottled water","Milk","Bread","Fruit","Local SIM / eSIM","Sun cream (big bottle)","Nappies (big pack)","Snacks","Beer / wine","Washing-up liquid","Toilet roll","Coffee / tea"]};
 var CATS = [["docs","Documents & money"],["tech","Tech & chargers"],["clothes","Clothes"],["shoes","Shoes"],["toiletries","Toiletries"],["health","Health & first aid"],["kids","Kids & babies"],["beach","Beach, pool & sun"],["journey","For the journey"],["work","Work kit"],["luggage","Bags & luggage"],["before","To do before you go"],["there","Get when you're there"],["other","Other"]];
 var BAGS = [["carry","Hand luggage","keep it with you"],["hold","Suitcase","hold luggage"],["wear","Wear on the day",""],["kids","Kids' bags",""],["before","To do before you go",""],["there","Get when you're there","don't pack these"]];
@@ -557,10 +563,17 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     return out;
   }
   var unknown = [];
-  function askBag(names, rows){
-    // rows: list of {own:i} or {n:name} for catalogue items
+  function askBag(names, change){
     if(!names.length) return; var one = names.length === 1;
     var cap = function(t){ return t.charAt(0).toUpperCase() + t.slice(1); };
+    if(change && one){
+      var n0 = names[0], oi0 = S.own.findIndex(function(o){ return norm(o.n) === norm(n0); }), ci0 = oi0 < 0 ? byNorm[norm(n0)] : null; if(oi0 < 0 && !ci0) return;
+      var curK = oi0 >= 0 ? S.own[oi0].b : bagOf(ci0), nm0 = oi0 >= 0 ? cap(S.own[oi0].n) : ci0.n;
+      var opts0 = BAGS.map(function(b){ return '<option value="' + b[0] + '"' + (b[0] === curK ? ' selected' : '') + '>' + b[1] + '</option>'; }).join("");
+      $("sortMsg").innerHTML = '<b class="chg-t">Change bag</b><span class="chg-n">' + esc(nm0) + '</span>';
+      $("sortRows").innerHTML = '<div class="chg"><div class="chg-r"><span class="chg-l">Current bag</span><span class="chg-v">' + esc(bagLabel[curK]) + '</span></div><div class="chg-r"><span class="chg-l">New bag</span><select ' + (oi0 >= 0 ? 'data-own="' + oi0 + '"' : 'data-n="' + esc(ci0.n) + '"') + ' aria-label="New bag">' + opts0 + '</select></div></div>';
+      $("sortbox").hidden = false; $("sortRows").querySelector("select").focus(); return;
+    }
     $("sortMsg").innerHTML = one ? 'Which bag does <b>' + esc(cap(names[0])) + '</b> go in?' : 'Which bag do these go in?';
     var opts = BAGS.map(function(b){ return '<option value="' + b[0] + '">' + b[1] + (b[2] ? ' – ' + b[2] : '') + '</option>'; }).join("");
     $("sortRows").innerHTML = names.map(function(n){
@@ -572,8 +585,10 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     $("sortbox").hidden = false; if(one) $("sortRows").querySelector("select").focus();
   }
   $("sortRows").addEventListener("change", function(e){ var sel = e.target.closest("select"); if(!sel) return;
-    if(sel.dataset.own !== undefined){ var o = S.own[+sel.dataset.own]; if(!o) return; o.b = sel.value; toast(o.n + " → " + bagLabel[o.b]); }
-    else { var it = byNorm[norm(sel.dataset.n)]; if(!it) return; if(sel.value === it.b) delete S.bag[it.n]; else S.bag[it.n] = sel.value; toast(it.n + " → " + bagLabel[sel.value]); }
+    var cv = $("sortRows").querySelector(".chg-v"), moved = cv ? " moved to " : " → ";
+    if(sel.dataset.own !== undefined){ var o = S.own[+sel.dataset.own]; if(!o) return; o.b = sel.value; toast(o.n + moved + bagLabel[o.b]); }
+    else { var it = byNorm[norm(sel.dataset.n)]; if(!it) return; if(sel.value === it.b) delete S.bag[it.n]; else S.bag[it.n] = sel.value; toast(it.n + moved + bagLabel[sel.value]); }
+    if(cv) cv.textContent = bagLabel[sel.value];
     save(); render(); });
   $("sortDone").addEventListener("click", function(){ $("sortbox").hidden = true; });
   function addTyped(v){
