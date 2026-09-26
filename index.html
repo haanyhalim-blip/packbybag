@@ -13,7 +13,12 @@
 <meta property="og:title" content="Pack by Bag – a packing list sorted by bag">
 <meta property="og:description" content="Start from a ready-made list, tap what you're taking, tick it off as you pack. Sorted by bag so nothing gets left behind. Free, no account.">
 <meta property="og:url" content="https://packbybag.com/">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://packbybag.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="PackbyBag – a packing list, sorted by bag">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://packbybag.com/og-image.png">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Pack by Bag","url":"https://packbybag.com/","applicationCategory":"TravelApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"description":"A quick packing list sorted by bag. Start from a ready-made list for the kind of trip, tap what you're taking, tick it off as you pack, share it with whoever is travelling with you. Free, no account needed."}</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f5f73'/%3E%3Crect x='14' y='24' width='36' height='26' rx='5' fill='none' stroke='%23fff' stroke-width='5'/%3E%3Cpath d='M24 24v-6a8 8 0 0 1 16 0v6' fill='none' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.webmanifest">
@@ -291,6 +296,14 @@ h2.aisle.rm .ah{color:var(--muted)}
 @media (max-width:480px){.actions .btn{padding:11px 8px;font-size:.86rem}}
 .btn.keepb{font-size:.8rem;padding:6px 10px;border-radius:99px;border-color:var(--main);color:var(--main-deep);flex:0 0 auto}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.guide{margin:34px 0 0;padding:18px 18px 6px;background:var(--card);border:1.5px solid var(--line);border-radius:12px;font-size:.92rem;color:var(--ink)}
+.guide h2{font-size:1.1rem;margin:0 0 8px;color:var(--main-deep, var(--main))}
+.guide h2+ul,.guide h2+p{margin-top:0}
+.guide ul{margin:0 0 18px;padding-left:18px}
+.guide li{margin:0 0 6px;line-height:1.4}
+.guide li span{color:var(--muted)}
+.guide h3{font-size:.98rem;margin:14px 0 4px}
+.guide p{margin:0 0 10px;line-height:1.5;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -358,6 +371,25 @@ h2.aisle.rm .ah{color:var(--muted)}
   <div id="out"></div>
 </div>
 
+<section class="guide" aria-labelledby="gTrips">
+  <h2 id="gTrips">Ready-made packing lists</h2>
+  <ul><li><b>Family holiday with kids</b> <span>– Sun, pool or beach, a week or two. Everything for the grown-ups plus the kids&#x27; bag and the get-there shop.</span></li><li><b>Holiday with your partner</b> <span>– A week away for two. Lighter than the family list, with a nice evening or two built in.</span></li><li><b>Work / business trip</b> <span>– Two to four nights, meetings and a hotel. Laptop in hand luggage, shirts in the case, nothing forgotten in the room.</span></li><li><b>Going to an event</b> <span>– A conference, exhibition or a few days of meetings. Long days on your feet, lots of people, business cards at the ready.</span></li><li><b>Long-haul, hand luggage only</b> <span>– One cabin bag, no waiting at the carousel. Everything goes in hand luggage – liquids under 100 ml.</span></li></ul>
+  <h2>School bag lists by age</h2>
+  <ul><li><b>Nursery &amp; pre-school</b> <span>– Ages 2–4. Spare clothes, comforter, outdoor gear and the nappy bits if they still need them.</span></li><li><b>Infants (Reception – Year 2)</b> <span>– Ages 4–7. Book bag and reading record, PE kit on PE days, spare pants for the little ones.</span></li><li><b>Juniors (Years 3 – 6)</b> <span>– Ages 7–11. Pencil case, homework and spellings, swim and club days – and keys or a phone for Year 6.</span></li><li><b>Secondary (Years 7 – 11)</b> <span>– Ages 11–16, and a good start for sixth form. Planner, today&#x27;s books, calculator, bus pass, charged phone.</span></li></ul>
+  <h2>Questions</h2>
+  <h3>How does Pack by Bag work?</h3>
+  <p>Type or paste what you're taking, or start from a ready-made list. Everything is sorted into bags – hand luggage, suitcase, wear on the day, kids' bags, to-dos before you go and things to buy when you get there – so you pack one bag at a time and tick things off as they go in.</p>
+  <h3>What should go in hand luggage rather than the suitcase?</h3>
+  <p>Passports and travel documents, bank cards, phone and chargers, medicines, glasses, anything valuable and a change of clothes in case the case goes missing. Liquids in hand luggage usually need to be under 100 ml each – check your airport. Pack by Bag puts these in hand luggage for you, and you can move anything with one tap.</p>
+  <h3>What should my child take to school?</h3>
+  <p>It depends on their age. Nursery children need spare clothes, a comforter and outdoor gear. Infants (Reception to Year 2) need a book bag, reading record, water bottle and PE kit on PE days. Juniors (Years 3 to 6) add a pencil case, homework, spellings and swim or club kit. Secondary pupils need a planner, today's exercise books, a scientific calculator, a bus pass and a charged phone. Pick the list for their age, add each child's name, and every child gets their own section.</p>
+  <h3>Can I use the same school list every day?</h3>
+  <p>Yes. Tap <b>Untick all</b> and the list stays, ready to pack again tomorrow morning.</p>
+  <h3>Can two people pack from the same list?</h3>
+  <p>Yes. Share a link and you both see the same list, ticked off as you go. Or send it as a message by WhatsApp or email.</p>
+  <h3>Is it free?</h3>
+  <p>Yes – free, with no account and no sign-up. Your list stays on your phone unless you share it.</p>
+</section>
 <div class="about">
   <p class="footlinks"><button class="link" id="howBtn" type="button" aria-expanded="false" aria-controls="howBox">How it works</button> · <button class="link" id="fbBtn" type="button" aria-expanded="false" aria-controls="feedback">Feedback &amp; suggestions</button></p>
 <div class="howwrap" id="howBox" hidden>
@@ -384,11 +416,11 @@ h2.aisle.rm .ah{color:var(--muted)}
   </div>
 </section>
 
-  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v30</span></p>
+  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v31</span></p>
 </div>
 </div>
 <script>
-var VERSION = 'v30';
+var VERSION = 'v31';
 var CAT = {"clothes":["Underwear","Socks","T-shirts","Tops","Shirts","Trousers","Jeans","Shorts","Skirts","Dresses","Jumper","Hoodie","Jacket","Raincoat","Warm coat","Pyjamas","Swimwear","Belt","Hat","Scarf","Gloves","Gym kit","Sportswear","Smart outfit","Evening outfit","Tights","Bras","Cover-up / sarong","Compression socks","Spare clothes (in hand luggage)"],"shoes":["Trainers","Sandals","Flip-flops","Smart shoes","Walking boots","Comfortable shoes (long days)","Slippers","Water shoes","Heels"],"toiletries":["Toothbrush","Toothpaste","Deodorant","Shampoo","Conditioner","Shower gel","Razor","Shaving foam","Moisturiser","Face wash","Sun cream","After sun","Lip balm","Hairbrush","Hair ties","Hair dryer","Straighteners","Make-up","Make-up remover","Nail clippers","Tweezers","Cotton buds","Sanitary products","Contact lenses","Lens solution","Glasses","Perfume / aftershave","Wet wipes","Tissues","Hand sanitiser","Insect repellent","Wash bag","Travel-size toiletries (under 100 ml)"],"health":["Prescription medicines","Paracetamol","Ibuprofen","Plasters","Blister plasters","Antihistamines","Travel sickness tablets","Rehydration sachets","Antiseptic cream","Diarrhoea tablets","Thermometer","Vitamins","Ear plugs","Eye mask","First aid kit","Inhaler","EpiPen"],"tech":["Phone","Phone charger","Spare phone charger","Power bank","Plug adapter","Laptop","Laptop charger","Tablet","Headphones","Earphones","E-reader","Camera","Camera charger","Memory cards","Smartwatch charger","USB cable","Extension lead / multi-plug","Portable speaker","Kids' tablet","Kids' headphones","Portable mouse","Laptop stand"],"docs":["Passport","Driving licence","Boarding passes","Train / flight tickets","Hotel booking","Event ticket / registration","Travel insurance details","Visa / ETA","Cash (local currency)","Bank cards","Travel card","Car hire booking","Copies of passport","Emergency contacts","Vaccination record","Work ID / badge","House keys","Car keys","Pen (for forms)"],"work":["Laptop bag","Notebook","Pens","Business cards","Presentation on USB","Lanyard","Name badge","Work phone","Suit","Ironed shirts","Ties","Receipts envelope (expenses)","Printouts / running order","Radio / walkie-talkie","Hi-vis vest","Steel-toe boots","Gaffer tape","Cable ties","Scissors","Sharpies","Clipboard","Spare lanyards","Stapler","Sticky labels"],"kids":["Nappies","Baby wipes","Nappy bags","Changing mat","Formula","Bottles","Dummies","Baby food pouches","Kids' snacks","Favourite toy","Comfort blanket","Books","Colouring pens","Activity pack","Car seat","Pushchair / buggy","Baby carrier","Travel cot","Bibs","Kids' sun cream","Armbands","Swim nappies","Kids' medicines","Children's paracetamol","Kids' water bottle","Sticker book","Small surprise for the journey"],"beach":["Beach towel","Beach bag","Sunglasses","Sunhat","Snorkel","Goggles","Bucket and spade","Inflatable","Waterproof phone pouch","Beach shoes","Kids' UV suit","Beach tent / shade"],"journey":["Neck pillow","Travel blanket","Reusable water bottle (empty through security)","Snacks for the journey","Book","Downloaded films","Downloaded playlist / podcasts","Chewing gum","Sick bags","Travel games"],"luggage":["Suitcase","Cabin case","Backpack","Day bag","Packing cubes","Laundry bag","Luggage tags","Luggage scales","Padlock (TSA)","Foldable shopping bag","Umbrella","Dry bag"],"before":["Check passport expiry","Check visa / ETA","Check in online","Download boarding passes","Tell the bank you're travelling","Order currency","Book airport parking / transfer","Arrange pet care","Arrange plant watering","Empty the fridge","Take the bins out","Set heating to holiday mode","Lock windows and doors","Set an out-of-office","Charge everything","Download maps offline","Photograph passport and cards","Buy travel insurance","Save bookings to your phone","Register the trip with the office","Pack medicines in hand luggage","Weigh the suitcase"],"there":["Bottled water","Milk","Bread","Fruit","Local SIM / eSIM","Sun cream (big bottle)","Nappies (big pack)","Snacks","Beer / wine","Washing-up liquid","Toilet roll","Coffee / tea"],"uniform":["School jumper / cardigan","School polo shirt","School shirt","School tie","School blazer","School trousers","School skirt / pinafore","Summer dress","School socks / tights","School shoes","School coat","Wellies","Puddle suit / waterproofs"],"school":["School bag","Book bag","Reading book","Reading record","Library book","Homework","Homework folder","Spellings","Letters / permission slips","Trip money","Show and tell","Pencil case","Pens (blue / black)","Pencils","Colouring pencils","Ruler","Rubber","Sharpener","Glue stick","Highlighters","Maths set","Scientific calculator","Planner","Timetable","Exercise books for today's lessons","Textbooks","School laptop / tablet","School laptop charger","Art / DT kit","Food tech ingredients","Musical instrument","Music book","Locker padlock","Bus pass","Full set of spare clothes","Spare pants and socks"],"sport":["PE kit","PE bag","PE T-shirt","PE shorts / skort","PE hoodie / tracksuit","PE trainers / plimsolls","Football boots","Shin pads","Gum shield","Swim kit","Swim towel","Swim hat","Club kit","Dance kit","Forest school kit"],"lunch":["Packed lunch","Lunchbox","School water bottle","Snack for break","Ice pack","Spoon / fork","Lunch card","Dinner money"],"schooltodo":["Sign the reading record","Check the school app / emails","Lay out uniform the night before","Pack the bag the night before","Check tomorrow's timetable","Charge phone / laptop","Top up lunch money","Label everything with their name","Practise spellings / times tables","Read together","Wash the PE kit","Put sun cream on"]};
 var CATS = [["docs","Documents & money"],["tech","Tech & chargers"],["clothes","Clothes"],["shoes","Shoes"],["toiletries","Toiletries"],["health","Health & first aid"],["kids","Kids & babies"],["uniform","Uniform & school clothes"],["school","School bag & books"],["sport","PE, swim & clubs"],["lunch","Lunch & snacks"],["schooltodo","School to-dos"],["beach","Beach, pool & sun"],["journey","For the journey"],["work","Work kit"],["luggage","Bags & luggage"],["before","To do before you go"],["there","Get when you're there"],["other","Other"]];
 var BAGS = [["carry","Hand luggage","keep it with you"],["hold","Suitcase","hold luggage"],["wear","Wear on the day",""],["schoolbag","School bag",""],["pebag","PE & swim bag","on PE and swim days"],["lunchbox","Lunch & snacks",""],["kids","Kids' bags",""],["before","To do before you go",""],["there","Get when you're there","don't pack these"]];
