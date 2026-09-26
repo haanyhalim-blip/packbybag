@@ -252,6 +252,7 @@ h2.aisle.rm .ah{color:var(--muted)}
 .empty .qaddb{margin-top:12px}
 .grid.srch{margin-top:6px}
 .it .al{color:var(--muted)}
+.vtog{display:inline-flex;margin:4px 0 8px;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;font-size:.85rem}.vtog button{font:inherit;border:0;background:transparent;color:inherit;padding:6px 12px;cursor:pointer}.vtog button[aria-pressed="true"]{background:var(--main);color:#fff}body.searching #btog{display:none}
 .srchadd{padding:12px 0 4px}
 .srchadd .qaddb{margin:6px 0 0}
 .empty b{display:block;font-size:1.05rem;color:var(--ink);margin-bottom:4px}
@@ -336,6 +337,7 @@ h2.aisle.rm .ah{color:var(--muted)}
 
 <h2 class="sec"><button class="sect" id="shopBtn" type="button" aria-expanded="true" aria-controls="shopBox"><span class="c"></span>Browse by category</button></h2>
 <div id="shopBox">
+  <div class="vtog" id="btog" role="group" aria-label="How to browse"><button type="button" data-v="cat" aria-pressed="true">By category</button><button type="button" data-v="az" aria-pressed="false">A to Z</button></div>
   <div id="out"></div>
 </div>
 
@@ -365,11 +367,11 @@ h2.aisle.rm .ah{color:var(--muted)}
   </div>
 </section>
 
-  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v25</span></p>
+  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v26</span></p>
 </div>
 </div>
 <script>
-var VERSION = 'v25';
+var VERSION = 'v26';
 var CAT = {"clothes":["Underwear","Socks","T-shirts","Tops","Shirts","Trousers","Jeans","Shorts","Skirts","Dresses","Jumper","Hoodie","Jacket","Raincoat","Warm coat","Pyjamas","Swimwear","Belt","Hat","Scarf","Gloves","Gym kit","Sportswear","Smart outfit","Evening outfit","Tights","Bras","Cover-up / sarong","Compression socks","Spare clothes (in hand luggage)"],"shoes":["Trainers","Sandals","Flip-flops","Smart shoes","Walking boots","Comfortable shoes (long days)","Slippers","Water shoes","Heels"],"toiletries":["Toothbrush","Toothpaste","Deodorant","Shampoo","Conditioner","Shower gel","Razor","Shaving foam","Moisturiser","Face wash","Sun cream","After sun","Lip balm","Hairbrush","Hair ties","Hair dryer","Straighteners","Make-up","Make-up remover","Nail clippers","Tweezers","Cotton buds","Sanitary products","Contact lenses","Lens solution","Glasses","Perfume / aftershave","Wet wipes","Tissues","Hand sanitiser","Insect repellent","Wash bag","Travel-size toiletries (under 100 ml)"],"health":["Prescription medicines","Paracetamol","Ibuprofen","Plasters","Blister plasters","Antihistamines","Travel sickness tablets","Rehydration sachets","Antiseptic cream","Diarrhoea tablets","Thermometer","Vitamins","Ear plugs","Eye mask","First aid kit"],"tech":["Phone","Phone charger","Spare phone charger","Power bank","Plug adapter","Laptop","Laptop charger","Tablet","Headphones","Earphones","E-reader","Camera","Camera charger","Memory cards","Smartwatch charger","USB cable","Extension lead / multi-plug","Portable speaker","Kids' tablet","Kids' headphones","Portable mouse","Laptop stand"],"docs":["Passport","Driving licence","Boarding passes","Train / flight tickets","Hotel booking","Event ticket / registration","Travel insurance details","Visa / ETA","Cash (local currency)","Bank cards","Travel card","Car hire booking","Copies of passport","Emergency contacts","Vaccination record","Work ID / badge","House keys","Car keys","Pen (for forms)"],"work":["Laptop bag","Notebook","Pens","Business cards","Presentation on USB","Lanyard","Name badge","Work phone","Suit","Ironed shirts","Ties","Receipts envelope (expenses)","Printouts / running order","Radio / walkie-talkie","Hi-vis vest","Steel-toe boots","Gaffer tape","Cable ties","Scissors","Sharpies","Clipboard","Spare lanyards","Stapler","Sticky labels"],"kids":["Nappies","Baby wipes","Nappy bags","Changing mat","Formula","Bottles","Dummies","Baby food pouches","Kids' snacks","Favourite toy","Comfort blanket","Books","Colouring pens","Activity pack","Car seat","Pushchair / buggy","Baby carrier","Travel cot","Bibs","Kids' sun cream","Armbands","Swim nappies","Kids' medicines","Children's paracetamol","Kids' water bottle","Sticker book","Small surprise for the journey"],"beach":["Beach towel","Beach bag","Sunglasses","Sunhat","Snorkel","Goggles","Bucket and spade","Inflatable","Waterproof phone pouch","Beach shoes","Kids' UV suit","Beach tent / shade"],"journey":["Neck pillow","Travel blanket","Reusable water bottle (empty through security)","Snacks for the journey","Book","Downloaded films","Downloaded playlist / podcasts","Chewing gum","Sick bags","Travel games"],"luggage":["Suitcase","Cabin case","Backpack","Day bag","Packing cubes","Laundry bag","Luggage tags","Luggage scales","Padlock (TSA)","Foldable shopping bag","Umbrella","Dry bag"],"before":["Check passport expiry","Check visa / ETA","Check in online","Download boarding passes","Tell the bank you're travelling","Order currency","Book airport parking / transfer","Arrange pet care","Arrange plant watering","Empty the fridge","Take the bins out","Set heating to holiday mode","Lock windows and doors","Set an out-of-office","Charge everything","Download maps offline","Photograph passport and cards","Buy travel insurance","Save bookings to your phone","Register the trip with the office","Pack medicines in hand luggage","Weigh the suitcase"],"there":["Bottled water","Milk","Bread","Fruit","Local SIM / eSIM","Sun cream (big bottle)","Nappies (big pack)","Snacks","Beer / wine","Washing-up liquid","Toilet roll","Coffee / tea"]};
 var CATS = [["docs","Documents & money"],["tech","Tech & chargers"],["clothes","Clothes"],["shoes","Shoes"],["toiletries","Toiletries"],["health","Health & first aid"],["kids","Kids & babies"],["beach","Beach, pool & sun"],["journey","For the journey"],["work","Work kit"],["luggage","Bags & luggage"],["before","To do before you go"],["there","Get when you're there"],["other","Other"]];
 var BAGS = [["carry","Hand luggage","keep it with you"],["hold","Suitcase","hold luggage"],["wear","Wear on the day",""],["kids","Kids' bags",""],["before","To do before you go",""],["there","Get when you're there","don't pack these"]];
@@ -397,6 +399,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   var S = {picked:{}, got:{}, own:[], bag:{}, removed:[], qty:{}, note:{}};
   var query = "";
   var OKEY = "packbybag-open-v1", OPEN = {docs:1};
+  var BVKEY = "packbybag-browse-v1", BVIEW = "cat"; try{ BVIEW = localStorage.getItem(BVKEY) === "az" ? "az" : "cat"; }catch(e){}
   var $ = function(id){ return document.getElementById(id); };
   var norm = function(s){ return String(s).toLowerCase().replace(/[’']/g,"").replace(/[^a-z0-9&\s]/g," ").replace(/\s+/g," ").trim(); };
   var esc = function(s){ return String(s).replace(/[&<>"]/g,function(c){ return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]; }); };
@@ -489,6 +492,20 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
       }
       if(shown) return html;
       return '<div class="empty"><b>Nothing on your list yet</b>Search at the top, start from a ready-made list, or browse by category.</div>';
+    }
+    if(BVIEW === "az"){
+      var byL = {};
+      function letterOf(n){ var L = norm(n).charAt(0).toUpperCase(); return /[A-Z]/.test(L) ? L : "#"; }
+      items.forEach(function(it){ var L = letterOf(it.n); (byL[L] = byL[L] || []).push({n:it.n, it:it}); });
+      S.own.forEach(function(o, i){ var L = letterOf(o.n); (byL[L] = byL[L] || []).push({n:o.n, own:o, i:i}); });
+      Object.keys(byL).sort().forEach(function(L){
+        var g = byL[L].sort(function(x, y){ return az(x.n, y.n); }); shown += g.length;
+        var pk = g.filter(function(x){ return x.own || S.picked[x.it.n]; }).length, k = "_az_" + L, open = !!OPEN[k];
+        html += '<h2 class="aisle"><button class="ah" data-a="'+k+'" aria-expanded="'+open+'"><span class="c"></span>'+L+'<span class="n">'+(pk ? '<span class="golist" role="link" title="See these on My bags">'+pk+' on list · <u>View</u> ›</span>' : '')+'</span></button></h2><div class="grid"'+(open ? '' : ' hidden')+'>';
+        g.forEach(function(x){ html += x.own ? ownBtn(x.own, x.i, true) : itemBtn(x.it, true); });
+        html += '</div>';
+      });
+      return html;
     }
     CATS.forEach(function(a){
       var g = items.filter(function(it){ return it.a === a[0]; }).sort(function(x, y){ return az(x.n, y.n); });
@@ -691,6 +708,8 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     save(); render();
   }
   $("out").addEventListener("click", onListClick); $("mine").addEventListener("click", onListClick);
+  function showBtog(){ $("btog").querySelectorAll("button").forEach(function(x){ x.setAttribute("aria-pressed", String(x.dataset.v === BVIEW)); }); }
+  showBtog(); $("btog").addEventListener("click", function(e){ var b = e.target.closest("button[data-v]"); if(!b) return; BVIEW = b.dataset.v; try{ localStorage.setItem(BVKEY, BVIEW); }catch(x){} showBtog(); render(); });
   $("mine").addEventListener("input", function(e){ var i = e.target.closest(".qc"); if(!i) return; var n = ctlKey(i.closest(".mctl")); if(!n) return; S.note = S.note || {}; var v = i.value.trim(); if(v) S.note[n] = v; else delete S.note[n]; save(); $("paper").textContent = nPicked() ? asText() : "Nothing on the list yet"; });
   $("mine").addEventListener("keydown", function(e){ if(e.target.closest(".qc") && e.key === "Enter"){ e.preventDefault(); e.target.blur(); } });
   $("q").addEventListener("input", function(){ var was = !!query.trim(), now = !!this.value.trim(); query = this.value; $("qClear").hidden = !now; document.body.classList.toggle("searching", now); render(); if(now && !was){ var st = document.querySelector(".sticky"); window.scrollTo({top: st.offsetTop, behavior: "auto"}); } });
