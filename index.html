@@ -165,6 +165,9 @@ body.searching #shopBox[hidden]{display:block}
 .dfoot .btn{flex:0 0 auto}
 .lhead .hshare{padding:6px 14px;font-size:.88rem;min-height:0;line-height:1.2}
 #listSec:has(#mineBody[hidden]) .lhead .hshare,#listSec:has(#mineBody[hidden]) .lhead .rmlink{display:none}
+.lhead .clearlink{font-size:.8rem;color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:4px 0;margin-left:auto}
+.lhead .clearlink[hidden]{display:none}
+#listSec:has(#mineBody[hidden]) .lhead .clearlink{display:none}
 .rmlink{font-size:.8rem;color:var(--muted);font-weight:400;text-decoration:underline;text-underline-offset:3px;padding:4px 0}
 .rmlink[hidden]{display:none}
 .rmlink[aria-expanded="true"]{color:var(--ink)}
@@ -351,7 +354,7 @@ h2.aisle.rm .ah{color:var(--muted)}
     <div class="lhead">
       <h2 class="ltitle"><button class="sect mine" id="mineBtn" type="button" aria-expanded="true" aria-controls="mineBody"><span class="c"></span>My bags</button></h2>
       <button class="btn primary hshare" id="mineShare" type="button" aria-expanded="false" aria-controls="shareBox">Share</button>
-      <button class="link quiet rmlink" id="rmBtn" type="button" hidden aria-expanded="false">Taken off <span id="rmN"></span></button>
+      <button class="link quiet clearlink" id="clear" type="button" hidden>New list</button>
     </div>
   <div id="mineBody">
     <div id="mine"></div>
@@ -368,7 +371,7 @@ h2.aisle.rm .ah{color:var(--muted)}
 <div class="shared" id="shared" hidden><input id="shareUrl" readonly aria-label="Link to this list" hidden><button class="link quiet" id="shareStop" type="button">Stop sharing</button></div>
 </div>
     <div class="dfoot">
-      <span class="count" id="countWrap"><span id="count"></span> · <button class="link quiet" id="again" type="button" title="Untick everything but keep the list – handy for the school run" hidden>Untick all</button> · <button class="link quiet" id="clear" type="button" hidden>New list</button></span>
+      <span class="count" id="countWrap"><span id="count"></span> · <button class="link quiet" id="again" type="button" title="Untick everything but keep the list – handy for the school run" hidden>Untick all</button></span>
     </div>
   </div>
 </section>
@@ -433,7 +436,7 @@ h2.aisle.rm .ah{color:var(--muted)}
   </div>
 </section>
 
-  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v32</span></p>
+  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v33</span></p>
 </div>
 </div>
 <script>
@@ -577,11 +580,6 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
       });
       if(kid) html += kidAdd(kid);
       var rmHtml = "";
-      if(S.removed.length && OPEN._removed === 1){ // opened from the link in the list heading
-        rmHtml = '<div class="rmpanel"><div class="rmhead"><b>Taken off</b><span class="sub">tap one to put it back</span><button class="link quiet" id="rmForget" type="button">Clear</button></div><div class="grid">';
-        S.removed.forEach(function(r, i){ rmHtml += '<button class="it rm" data-rm="'+i+'"><span class="box"></span><span><span class="nm">'+esc(okey(r))+'</span></span></button>'; });
-        rmHtml += '</div></div>';
-      }
       if(shown) return rmHtml + html;
       return rmHtml + '<div class="empty"><b>Nothing on your list yet</b>Search at the top, start from a ready-made list, or browse by category.</div>';
     }
@@ -628,12 +626,10 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     $("count").innerHTML = p ? '<b>'+p+'</b> on the list · <b>'+nGot()+'</b> packed or done' : ''; $("countWrap").hidden = !p;
     ["copy","wa","mail"].forEach(function(id){ $(id).disabled = !p; });
     $("clear").hidden = !p;
-    if(!S.removed.length) OPEN._removed = 0;
-    $("rmBtn").hidden = !S.removed.length; $("rmN").textContent = "(" + S.removed.length + ")"; $("rmBtn").setAttribute("aria-expanded", String(OPEN._removed === 1)); $("again").hidden = !nGot();
     $("paper").textContent = p ? asText() : "Nothing on the list yet";
   }
   function unpark(k){ S.removed = S.removed.filter(function(x){ return norm(okey(x)) !== norm(k); }); }
-  function park(r){ unpark(okey(r)); S.removed.unshift(r); if(S.removed.length > 60) S.removed.length = 60; }
+  function park(r){ S.removed = []; } // removed items are no longer kept – the red symbol removes for good (Undo is in the pop-up)
   function hasOwn(k){ return S.own.some(function(o){ return norm(okey(o)) === norm(k); }); }
   function unTake(r){ if(r.own){ if(!hasOwn(okey(r))){ var o = {n:r.n, a:r.own.a, b:r.own.b, got:false}; if(r.w) o.w = r.w; S.own.push(o); } } else { S.picked[r.n] = 1; delete S.got[r.n]; } }
   function restore(i){ var r = S.removed.splice(i, 1)[0]; if(!r) return;
@@ -643,7 +639,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   function takeOff(b){ var r; if(b.dataset.own !== undefined){ var o = S.own[+b.dataset.own]; if(!o) return; r = {n:o.n, own:{a:o.a, b:o.b}}; if(o.w) r.w = o.w; S.own.splice(+b.dataset.own, 1); }
     else { r = {n:b.dataset.n}; delete S.picked[r.n]; delete S.got[r.n]; }
     var k = okey(r); if(S.note) delete S.note[k]; if(S.qty) delete S.qty[k]; park(r); save(); render();
-    toast(k + " taken off – find it under Taken off at the top of your list", function(){ unpark(k); unTake(r); save(); render(); }); }
+    toast(k + " removed", function(){ unpark(k); unTake(r); save(); render(); }); }
 
   function addOne(v){
     v = v.trim().replace(/^[-*\u2022\u2610\u2611\u2612\[\]x ]+/i, "").replace(/^\d+\s*x?\s+/i, "").trim(); if(!v) return false;
@@ -827,7 +823,6 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   $("q").addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); if(splitRaw(this.value).length > 1) addTyped(this.value); else this.blur(); } });
   function clearAll(){ if(!nPicked()) return; if(!confirm("Start a new list? This clears the whole list.")) return; S = {picked:{}, got:{}, own:[], bag:{}, removed:[], qty:{}, note:{}}; save(); render(); toast("Cleared – ready for the next one"); }
   $("clear").addEventListener("click", clearAll);
-  $("rmBtn").addEventListener("click", function(){ OPEN._removed = OPEN._removed === 1 ? 0 : 1; render(); });
   // Pack again: untick everything but keep the list (the school run, or the trip home)
   function untickAll(){ if(!nGot()) return; var got = S.got, owned = S.own.map(function(o){ return !!o.got; });
     S.got = {}; S.own.forEach(function(o){ o.got = false; }); save(); render();
