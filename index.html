@@ -345,10 +345,8 @@ h2.aisle.rm .ah{color:var(--muted)}
   <a class="brand" href="/">Pack<span>by</span>Bag</a>
   <h1 class="tagline">A packing list, sorted by bag.</h1>
   <a class="howtop" id="howTop" href="#howBox">How it works</a>
-  <button class="btn keepb" id="keepBtn" type="button">Bookmark this page</button>
   <button class="btn keepb acctb" id="acctBtn" type="button">Sign in</button>
 </header>
-<div class="keep" id="keep" hidden></div>
 
 <div class="sticky">
   <h2 class="stitle">Search</h2>
@@ -451,7 +449,7 @@ h2.aisle.rm .ah{color:var(--muted)}
   </div>
 </section>
 
-  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v35</span></p>
+  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v36</span></p>
 </div>
 </div>
 <div id="acct" hidden role="dialog" aria-modal="true" aria-labelledby="acTitle"><div class="acbox"><button class="acx" id="acX" type="button" aria-label="Close">×</button>
@@ -881,23 +879,6 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   $("mail").addEventListener("click", function(){ var t = asText(); if(!t) return; location.href = "mailto:?subject=" + encodeURIComponent("Packing list") + "&body=" + encodeURIComponent(t); });
 
   load(); drawTrips(); render();
-  (function(){
-    var deferred = null, box = $("keep");
-    window.addEventListener("beforeinstallprompt", function(e){ e.preventDefault(); deferred = e; });
-    function steps(){
-      var ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua), android = /Android/.test(ua), mac = /Mac/.test(ua);
-      if(ios) return "On iPhone: tap the <b>Share</b> button (the square with an arrow) at the bottom of Safari, then <b>Add to Home Screen</b>. PackbyBag gets its own icon, like an app.";
-      if(android) return "Tap the <b>⋮ menu</b> at the top right of the browser, then <b>Add to Home screen</b> (or <b>Install app</b>). PackbyBag gets its own icon, like an app.";
-      return "Press <b>" + (mac ? "Cmd + D" : "Ctrl + D") + "</b> to bookmark this page. On your phone, open packbybag.com and use <b>Add to Home Screen</b> for an app icon.";
-    }
-    $("keepBtn").addEventListener("click", function(){
-      if(deferred){ deferred.prompt(); deferred.userChoice.then(function(){ deferred = null; }); return; }
-      if(!box.hidden){ box.hidden = true; return; }
-      box.innerHTML = steps() + ' <button class="link quiet" id="keepClose" type="button">Close</button>'; box.hidden = false;
-      $("keepClose").addEventListener("click", function(){ box.hidden = true; });
-    });
-  })();
-
   // How it works: collapsed by default; captions follow the demo video's clock, so Pause freezes both
   (function(){
     var btn = $("howBtn"), box = $("howBox"), vid = $("demoVid"), pp = $("demoPP"), big = $("demoBig"), steps = document.querySelectorAll("#steps .step");
