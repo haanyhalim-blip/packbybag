@@ -32,7 +32,7 @@
 :root{
   color-scheme:light;
   --bg:#eef3f4; --card:#fff; --line:#cfdde1; --ink:#182a31; --muted:#5c7079; --faint:#93a5ac;
-  --main:#1f5f73; --main-deep:#16475a; --wash:#dbeaef; --accent:#b5532a; --accent-wash:#f6e4db; --second:#b0611c; --second-deep:#864713; --second-wash:#f6e6d3;
+  --main:#1f5f73; --main-deep:#16475a; --wash:#dbeaef; --accent:#b5532a; --accent-wash:#f6e4db; --second:#182a31; --second-deep:#0f1c21; --second-wash:#eceff0; /* list colour = the ink of "by" in the logo */
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -150,7 +150,7 @@ body.searching #shopBox[hidden]{display:block}
 #listSec:has(#mineBody[hidden]) .lhead{border-bottom:0;padding-bottom:2px}
 .sect.mine{color:var(--second-deep);width:auto;gap:8px}
 .sect.mine .brand{font-size:1.25rem;margin-left:2px}
-.lhead{display:flex;align-items:center;gap:10px;padding:6px 0 6px;border-bottom:1.5px solid var(--second, var(--purple))}
+.lhead{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:6px 0 8px;border-bottom:1.5px solid var(--second, var(--purple))}
 .ltitle{flex:1;margin:0;font-size:1.2rem;font-weight:700;color:var(--second-deep, var(--purple-deep))}
 .lhead #clear{font-size:.78rem;color:var(--accent);font-weight:700;text-align:right;line-height:1.15;white-space:nowrap}
 .lhead #clear[hidden]{display:none}
@@ -163,11 +163,23 @@ body.searching #shopBox[hidden]{display:block}
 .btn.back{padding:9px 10px;font-size:.88rem}
 .dfoot{display:flex;gap:10px;flex-wrap:nowrap;align-items:center;justify-content:space-between;margin-top:16px}
 .dfoot .btn{flex:0 0 auto}
+.lhead .hshare{padding:6px 14px;font-size:.88rem;min-height:0;line-height:1.2}
+#listSec:has(#mineBody[hidden]) .lhead .hshare,#listSec:has(#mineBody[hidden]) .lhead .rmlink{display:none}
+.rmlink{font-size:.8rem;color:var(--muted);font-weight:400;text-decoration:underline;text-underline-offset:3px;padding:4px 0}
+.rmlink[hidden]{display:none}
+.rmlink[aria-expanded="true"]{color:var(--ink)}
+.rmpanel{background:#f3f2ee;border-radius:10px;padding:8px 10px;margin:12px 0 4px}
+.rmhead{display:flex;align-items:baseline;gap:8px;font-size:.85rem;color:var(--muted)}
+.rmhead b{color:var(--ink)}
+.rmhead #rmForget{margin-left:auto;font-size:.8rem;color:var(--accent);font-weight:700}
+.count #clear{font-size:.82rem;color:var(--accent);font-weight:700}
+.count #again{font-size:.82rem;color:var(--muted)}
+.count #clear[hidden],.count #again[hidden]{display:none}
 #mineShare{background:var(--second);border-color:var(--second)}
 #mineShare:hover{background:var(--second-deep);border-color:var(--second-deep)}
 #shareBox .btn.primary{background:var(--second);border-color:var(--second)}
 #shareBox .btn.share{border-color:var(--second);color:var(--second-deep)}
-#mine .aisle .ah{color:#a8927f;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:4px 0 2px;margin:14px 0 0;background:none;border:0;border-radius:0;text-decoration:none;cursor:default}
+#mine .aisle .ah{color:#8a8f8c;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:4px 0 2px;margin:14px 0 0;background:none;border:0;border-radius:0;text-decoration:none;cursor:default}
 #mine .aisle .ah .c{display:none}
 #mine .aisle .ah .sub{font-size:.72rem;letter-spacing:0;text-transform:none;font-weight:400;color:var(--muted);margin-left:2px}
 #mine .grid{display:block;margin:0 0 4px}
@@ -297,6 +309,10 @@ h2.aisle.rm .ah{color:var(--muted)}
 .btn.keepb{font-size:.8rem;padding:6px 10px;border-radius:99px;border-color:var(--main);color:var(--main-deep);flex:0 0 auto}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 .guide{margin:34px 0 0;padding:18px 18px 6px;background:var(--card);border:1.5px solid var(--line);border-radius:12px;font-size:.92rem;color:var(--ink)}
+.gfold>summary{cursor:pointer;list-style:none;font-size:1.1rem;font-weight:700;color:var(--main-deep, var(--main));display:flex;align-items:center;gap:10px;padding:2px 0 12px}
+.gfold>summary::-webkit-details-marker{display:none}
+.gfold>summary::before{content:"";width:9px;height:9px;border-right:2.5px solid currentColor;border-bottom:2.5px solid currentColor;transform:rotate(-45deg);transition:transform .15s;flex:none}
+.gfold[open]>summary::before{transform:rotate(45deg)}
 .guide h2{font-size:1.1rem;margin:0 0 8px;color:var(--main-deep, var(--main))}
 .guide h2+ul,.guide h2+p{margin-top:0}
 .guide ul{margin:0 0 18px;padding-left:18px}
@@ -334,8 +350,8 @@ h2.aisle.rm .ah{color:var(--muted)}
 <section id="listSec">
     <div class="lhead">
       <h2 class="ltitle"><button class="sect mine" id="mineBtn" type="button" aria-expanded="true" aria-controls="mineBody"><span class="c"></span>My bags</button></h2>
-      <button class="link quiet" id="again" type="button" title="Untick everything but keep the list – handy for the school run" hidden>Untick all</button>
-      <button class="link quiet" id="clear" type="button" hidden>New list</button>
+      <button class="btn primary hshare" id="mineShare" type="button" aria-expanded="false" aria-controls="shareBox">Share</button>
+      <button class="link quiet rmlink" id="rmBtn" type="button" hidden aria-expanded="false">Taken off <span id="rmN"></span></button>
     </div>
   <div id="mineBody">
     <div id="mine"></div>
@@ -352,8 +368,7 @@ h2.aisle.rm .ah{color:var(--muted)}
 <div class="shared" id="shared" hidden><input id="shareUrl" readonly aria-label="Link to this list" hidden><button class="link quiet" id="shareStop" type="button">Stop sharing</button></div>
 </div>
     <div class="dfoot">
-      <span class="count" id="countWrap"><span id="count"></span></span>
-      <button class="btn primary" id="mineShare" type="button" aria-expanded="false" aria-controls="shareBox">Share this list</button>
+      <span class="count" id="countWrap"><span id="count"></span> · <button class="link quiet" id="again" type="button" title="Untick everything but keep the list – handy for the school run" hidden>Untick all</button> · <button class="link quiet" id="clear" type="button" hidden>New list</button></span>
     </div>
   </div>
 </section>
@@ -372,6 +387,7 @@ h2.aisle.rm .ah{color:var(--muted)}
 </div>
 
 <section class="guide" aria-labelledby="gTrips">
+<details class="gfold"><summary>Ready-made lists &amp; common questions</summary>
   <h2 id="gTrips">Ready-made packing lists</h2>
   <ul><li><b>Family holiday with kids</b> <span>– Sun, pool or beach, a week or two. Everything for the grown-ups plus the kids&#x27; bag and the get-there shop.</span></li><li><b>Holiday with your partner</b> <span>– A week away for two. Lighter than the family list, with a nice evening or two built in.</span></li><li><b>Work / business trip</b> <span>– Two to four nights, meetings and a hotel. Laptop in hand luggage, shirts in the case, nothing forgotten in the room.</span></li><li><b>Going to an event</b> <span>– A conference, exhibition or a few days of meetings. Long days on your feet, lots of people, business cards at the ready.</span></li><li><b>Long-haul, hand luggage only</b> <span>– One cabin bag, no waiting at the carousel. Everything goes in hand luggage – liquids under 100 ml.</span></li></ul>
   <h2>School bag lists by age</h2>
@@ -389,6 +405,7 @@ h2.aisle.rm .ah{color:var(--muted)}
   <p>Yes. Share a link and you both see the same list, ticked off as you go. Or send it as a message by WhatsApp or email.</p>
   <h3>Is it free?</h3>
   <p>Yes – free, with no account and no sign-up. Your list stays on your phone unless you share it.</p>
+</details>
 </section>
 <div class="about">
   <p class="footlinks"><button class="link" id="howBtn" type="button" aria-expanded="false" aria-controls="howBox">How it works</button> · <button class="link" id="fbBtn" type="button" aria-expanded="false" aria-controls="feedback">Feedback &amp; suggestions</button></p>
@@ -416,7 +433,7 @@ h2.aisle.rm .ah{color:var(--muted)}
   </div>
 </section>
 
-  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v31</span></p>
+  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v32</span></p>
 </div>
 </div>
 <script>
@@ -559,15 +576,14 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
         html += '</div>';
       });
       if(kid) html += kidAdd(kid);
-      if(S.removed.length){
-        var ropen = OPEN._removed === 1;
-        html += '<h2 class="aisle rm"><button class="ah" data-a="_removed" aria-expanded="'+ropen+'"><span class="c"></span>Taken off <span class="sub">('+S.removed.length+')</span></button><button class="link quiet" id="rmForget" type="button">Clear</button></h2><div class="grid"'+(ropen ? '' : ' hidden')+'>';
-        S.removed.forEach(function(r, i){ html += '<button class="it rm" data-rm="'+i+'"><span class="box"></span><span><span class="nm">'+esc(okey(r))+'</span></span></button>'; });
-        html += '</div>';
-        shown += S.removed.length;
+      var rmHtml = "";
+      if(S.removed.length && OPEN._removed === 1){ // opened from the link in the list heading
+        rmHtml = '<div class="rmpanel"><div class="rmhead"><b>Taken off</b><span class="sub">tap one to put it back</span><button class="link quiet" id="rmForget" type="button">Clear</button></div><div class="grid">';
+        S.removed.forEach(function(r, i){ rmHtml += '<button class="it rm" data-rm="'+i+'"><span class="box"></span><span><span class="nm">'+esc(okey(r))+'</span></span></button>'; });
+        rmHtml += '</div></div>';
       }
-      if(shown) return html;
-      return '<div class="empty"><b>Nothing on your list yet</b>Search at the top, start from a ready-made list, or browse by category.</div>';
+      if(shown) return rmHtml + html;
+      return rmHtml + '<div class="empty"><b>Nothing on your list yet</b>Search at the top, start from a ready-made list, or browse by category.</div>';
     }
     if(BVIEW === "az"){
       var byL = {};
@@ -611,7 +627,9 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     var p = nPicked();
     $("count").innerHTML = p ? '<b>'+p+'</b> on the list · <b>'+nGot()+'</b> packed or done' : ''; $("countWrap").hidden = !p;
     ["copy","wa","mail"].forEach(function(id){ $(id).disabled = !p; });
-    $("clear").hidden = !p; $("again").hidden = !nGot();
+    $("clear").hidden = !p;
+    if(!S.removed.length) OPEN._removed = 0;
+    $("rmBtn").hidden = !S.removed.length; $("rmN").textContent = "(" + S.removed.length + ")"; $("rmBtn").setAttribute("aria-expanded", String(OPEN._removed === 1)); $("again").hidden = !nGot();
     $("paper").textContent = p ? asText() : "Nothing on the list yet";
   }
   function unpark(k){ S.removed = S.removed.filter(function(x){ return norm(okey(x)) !== norm(k); }); }
@@ -625,7 +643,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   function takeOff(b){ var r; if(b.dataset.own !== undefined){ var o = S.own[+b.dataset.own]; if(!o) return; r = {n:o.n, own:{a:o.a, b:o.b}}; if(o.w) r.w = o.w; S.own.splice(+b.dataset.own, 1); }
     else { r = {n:b.dataset.n}; delete S.picked[r.n]; delete S.got[r.n]; }
     var k = okey(r); if(S.note) delete S.note[k]; if(S.qty) delete S.qty[k]; park(r); save(); render();
-    toast(k + " taken off – it's in Taken off at the bottom", function(){ unpark(k); unTake(r); save(); render(); }); }
+    toast(k + " taken off – find it under Taken off at the top of your list", function(){ unpark(k); unTake(r); save(); render(); }); }
 
   function addOne(v){
     v = v.trim().replace(/^[-*\u2022\u2610\u2611\u2612\[\]x ]+/i, "").replace(/^\d+\s*x?\s+/i, "").trim(); if(!v) return false;
@@ -809,6 +827,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   $("q").addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); if(splitRaw(this.value).length > 1) addTyped(this.value); else this.blur(); } });
   function clearAll(){ if(!nPicked()) return; if(!confirm("Start a new list? This clears the whole list.")) return; S = {picked:{}, got:{}, own:[], bag:{}, removed:[], qty:{}, note:{}}; save(); render(); toast("Cleared – ready for the next one"); }
   $("clear").addEventListener("click", clearAll);
+  $("rmBtn").addEventListener("click", function(){ OPEN._removed = OPEN._removed === 1 ? 0 : 1; render(); });
   // Pack again: untick everything but keep the list (the school run, or the trip home)
   function untickAll(){ if(!nGot()) return; var got = S.got, owned = S.own.map(function(o){ return !!o.got; });
     S.got = {}; S.own.forEach(function(o){ o.got = false; }); save(); render();
@@ -881,7 +900,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     function fold(btnId, boxId){ var b = $(btnId), x = $(boxId); b.addEventListener("click", function(){ var open = x.hidden; x.hidden = !open; b.setAttribute("aria-expanded", String(open)); }); }
     fold("tripBtn", "tripBox"); fold("shopBtn", "shopBox"); fold("fbBtn", "feedback"); fold("mineBtn", "mineBody");
     var sb = $("mineShare"), sx = $("shareBox");
-    sb.addEventListener("click", function(){ var open = sx.hidden; sx.hidden = !open; sb.setAttribute("aria-expanded", String(open)); sb.textContent = open ? "Hide sharing" : "Share this list"; if(open) setTimeout(function(){ sx.scrollIntoView({block:"start", behavior:"smooth"}); }, 30); });
+    sb.addEventListener("click", function(){ var open = sx.hidden; sx.hidden = !open; sb.setAttribute("aria-expanded", String(open)); sb.textContent = open ? "Close" : "Share"; if(open) setTimeout(function(){ sx.scrollIntoView({block:"start", behavior:"smooth"}); }, 30); });
   })();
 
   // ---------- Shared lists (Supabase) ----------
