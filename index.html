@@ -324,6 +324,19 @@ h2.aisle.rm .ah{color:var(--muted)}
 .guide li span{color:var(--muted)}
 .guide h3{font-size:.98rem;margin:14px 0 4px}
 .guide p{margin:0 0 10px;line-height:1.5;color:var(--muted)}
+/* Sign in (optional) */
+#acct{position:fixed;inset:0;background:rgba(20,25,30,.45);z-index:60;overflow-y:auto;padding:40px 16px}
+#acct[hidden]{display:none}
+.acbox{max-width:420px;margin:0 auto;background:#fff;border-radius:14px;padding:20px;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.acbox h2{margin:0 30px 8px 0;font-size:1.3rem;color:var(--main-deep)}
+.acbox p{margin:0 0 10px;line-height:1.45}
+.acbox label{display:block;font-weight:700;margin:12px 0 6px}
+.acbox input{width:100%;font:inherit;padding:11px 12px;border:1.5px solid #ddd;border-radius:10px;box-sizing:border-box}
+.acbox .btn.primary{display:block;width:100%;margin-top:12px}
+.acbox .link{margin-top:8px}
+.acsmall{font-size:.85rem;color:#6b716c}
+.acx{position:absolute;right:10px;top:8px;border:0;background:none;font-size:1.6rem;line-height:1;color:#888;cursor:pointer}
+.acctb.on{background:var(--main);color:#fff}
 </style>
 </head>
 <body>
@@ -333,6 +346,7 @@ h2.aisle.rm .ah{color:var(--muted)}
   <h1 class="tagline">A packing list, sorted by bag.</h1>
   <a class="howtop" id="howTop" href="#howBox">How it works</a>
   <button class="btn keepb" id="keepBtn" type="button">Bookmark this page</button>
+  <button class="btn keepb acctb" id="acctBtn" type="button">Sign in</button>
 </header>
 <div class="keep" id="keep" hidden></div>
 
@@ -432,14 +446,28 @@ h2.aisle.rm .ah{color:var(--muted)}
   <p>A missing item, something in the wrong bag, a ready-made list you'd like (a ski trip, a festival, a school trip) – or something a starter list gets wrong for how your family or your job travels.</p>
   <textarea id="fbtext" placeholder="Write anything…"></textarea>
   <div class="row">
-    <small id="fbnote">No account, no tracking.</small>
+    <small id="fbnote">No account needed, no tracking.</small>
     <button class="btn primary" id="fbsend" type="button">Send</button>
   </div>
 </section>
 
-  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v34</span></p>
+  <p class="tiny">Sister site of <a href="https://listbyaisle.com/">ListbyAisle</a>, a shopping list sorted by aisle. Both from Handy Little Tools. <span class="ver">v35</span></p>
 </div>
 </div>
+<div id="acct" hidden role="dialog" aria-modal="true" aria-labelledby="acTitle"><div class="acbox"><button class="acx" id="acX" type="button" aria-label="Close">×</button>
+  <h2 id="acTitle">Keep your packing list safe</h2>
+  <div id="acOut">
+    <p>Sign in with your email and your packing list is saved to your account – open it on any phone or laptop. No password: we email you a 6-digit code.</p>
+    <div id="acStep1"><label for="acEmail">Your email</label><input id="acEmail" type="email" autocomplete="email" inputmode="email" maxlength="200"><button class="btn primary" id="acSend" type="button">Email me a code</button></div>
+    <div id="acStep2" hidden><p>We've sent a code to <b id="acTo"></b>. It can take a minute – check your junk folder too.</p><label for="acCode">The code from the email</label><input id="acCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10"><button class="btn primary" id="acGo" type="button">Sign in</button><button class="link" id="acBack" type="button">Use a different email</button></div>
+    <p class="acsmall">Optional. We only use your email to sign you in. One sign-in works on all the Handy Little Tools sites.</p>
+  </div>
+  <div id="acIn" hidden>
+    <p>Signed in as <b id="acWho"></b>. Your packing list is saved to your account – sign in on any phone or laptop to open it.</p>
+    <p class="acsmall" id="acState"></p>
+    <button class="btn" id="acOutBtn" type="button">Sign out</button>
+  </div>
+</div></div>
 <script>
 var VERSION = 'v31';
 var CAT = {"clothes":["Underwear","Socks","T-shirts","Tops","Shirts","Trousers","Jeans","Shorts","Skirts","Dresses","Jumper","Hoodie","Jacket","Raincoat","Warm coat","Pyjamas","Swimwear","Belt","Hat","Scarf","Gloves","Gym kit","Sportswear","Smart outfit","Evening outfit","Tights","Bras","Cover-up / sarong","Compression socks","Spare clothes (in hand luggage)"],"shoes":["Trainers","Sandals","Flip-flops","Smart shoes","Walking boots","Comfortable shoes (long days)","Slippers","Water shoes","Heels"],"toiletries":["Toothbrush","Toothpaste","Deodorant","Shampoo","Conditioner","Shower gel","Razor","Shaving foam","Moisturiser","Face wash","Sun cream","After sun","Lip balm","Hairbrush","Hair ties","Hair dryer","Straighteners","Make-up","Make-up remover","Nail clippers","Tweezers","Cotton buds","Sanitary products","Contact lenses","Lens solution","Glasses","Perfume / aftershave","Wet wipes","Tissues","Hand sanitiser","Insect repellent","Wash bag","Travel-size toiletries (under 100 ml)"],"health":["Prescription medicines","Paracetamol","Ibuprofen","Plasters","Blister plasters","Antihistamines","Travel sickness tablets","Rehydration sachets","Antiseptic cream","Diarrhoea tablets","Thermometer","Vitamins","Ear plugs","Eye mask","First aid kit","Inhaler","EpiPen"],"tech":["Phone","Phone charger","Spare phone charger","Power bank","Plug adapter","Laptop","Laptop charger","Tablet","Headphones","Earphones","E-reader","Camera","Camera charger","Memory cards","Smartwatch charger","USB cable","Extension lead / multi-plug","Portable speaker","Kids' tablet","Kids' headphones","Portable mouse","Laptop stand"],"docs":["Passport","Driving licence","Boarding passes","Train / flight tickets","Hotel booking","Event ticket / registration","Travel insurance details","Visa / ETA","Cash (local currency)","Bank cards","Travel card","Car hire booking","Copies of passport","Emergency contacts","Vaccination record","Work ID / badge","House keys","Car keys","Pen (for forms)"],"work":["Laptop bag","Notebook","Pens","Business cards","Presentation on USB","Lanyard","Name badge","Work phone","Suit","Ironed shirts","Ties","Receipts envelope (expenses)","Printouts / running order","Radio / walkie-talkie","Hi-vis vest","Steel-toe boots","Gaffer tape","Cable ties","Scissors","Sharpies","Clipboard","Spare lanyards","Stapler","Sticky labels"],"kids":["Nappies","Baby wipes","Nappy bags","Changing mat","Formula","Bottles","Dummies","Baby food pouches","Kids' snacks","Favourite toy","Comfort blanket","Books","Colouring pens","Activity pack","Car seat","Pushchair / buggy","Baby carrier","Travel cot","Bibs","Kids' sun cream","Armbands","Swim nappies","Kids' medicines","Children's paracetamol","Kids' water bottle","Sticker book","Small surprise for the journey"],"beach":["Beach towel","Beach bag","Sunglasses","Sunhat","Snorkel","Goggles","Bucket and spade","Inflatable","Waterproof phone pouch","Beach shoes","Kids' UV suit","Beach tent / shade"],"journey":["Neck pillow","Travel blanket","Reusable water bottle (empty through security)","Snacks for the journey","Book","Downloaded films","Downloaded playlist / podcasts","Chewing gum","Sick bags","Travel games"],"luggage":["Suitcase","Cabin case","Backpack","Day bag","Packing cubes","Laundry bag","Luggage tags","Luggage scales","Padlock (TSA)","Foldable shopping bag","Umbrella","Dry bag"],"before":["Check passport expiry","Check visa / ETA","Check in online","Download boarding passes","Tell the bank you're travelling","Order currency","Book airport parking / transfer","Arrange pet care","Arrange plant watering","Empty the fridge","Take the bins out","Set heating to holiday mode","Lock windows and doors","Set an out-of-office","Charge everything","Download maps offline","Photograph passport and cards","Buy travel insurance","Save bookings to your phone","Register the trip with the office","Pack medicines in hand luggage","Weigh the suitcase"],"there":["Bottled water","Milk","Bread","Fruit","Local SIM / eSIM","Sun cream (big bottle)","Nappies (big pack)","Snacks","Beer / wine","Washing-up liquid","Toilet roll","Coffee / tea"],"uniform":["School jumper / cardigan","School polo shirt","School shirt","School tie","School blazer","School trousers","School skirt / pinafore","Summer dress","School socks / tights","School shoes","School coat","Wellies","Puddle suit / waterproofs"],"school":["School bag","Book bag","Reading book","Reading record","Library book","Homework","Homework folder","Spellings","Letters / permission slips","Trip money","Show and tell","Pencil case","Pens (blue / black)","Pencils","Colouring pencils","Ruler","Rubber","Sharpener","Glue stick","Highlighters","Maths set","Scientific calculator","Planner","Timetable","Exercise books for today's lessons","Textbooks","School laptop / tablet","School laptop charger","Art / DT kit","Food tech ingredients","Musical instrument","Music book","Locker padlock","Bus pass","Full set of spare clothes","Spare pants and socks"],"sport":["PE kit","PE bag","PE T-shirt","PE shorts / skort","PE hoodie / tracksuit","PE trainers / plimsolls","Football boots","Shin pads","Gum shield","Swim kit","Swim towel","Swim hat","Club kit","Dance kit","Forest school kit"],"lunch":["Packed lunch","Lunchbox","School water bottle","Snack for break","Ice pack","Spoon / fork","Lunch card","Dinner money"],"schooltodo":["Sign the reading record","Check the school app / emails","Lay out uniform the night before","Pack the bag the night before","Check tomorrow's timetable","Charge phone / laptop","Top up lunch money","Label everything with their name","Practise spellings / times tables","Read together","Wash the PE kit","Put sun cream on"]};
@@ -495,7 +523,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   function classify(n){ var q = norm(n); for(var i = 0; i < RULES.length; i++){ if(RULES[i][0].test(q)) return RULES[i][1]; } return "other"; }
   function doneWord(b){ return b === "before" ? "done" : b === "there" ? "got it" : "packed"; }
 
-  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} if(typeof syncPush === "function") syncPush(); }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} if(typeof syncPush === "function") syncPush(); if(typeof acctPush === "function") acctPush(); }
   function load(){ try{ var r = localStorage.getItem(KEY); if(r){ var v = JSON.parse(r); if(v && typeof v === "object"){ S.picked = v.picked || {}; S.got = v.got || {}; S.own = v.own || []; S.bag = v.bag || {}; S.removed = v.removed || []; S.qty = v.qty || {}; S.note = v.note || {}; } } }catch(e){}
     try{ var o = localStorage.getItem(OKEY); if(o) OPEN = JSON.parse(o) || OPEN; }catch(e){}
     S.own.forEach(function(o){ if(!CATS.some(function(a){ return a[0] === o.a; })) o.a = classify(o.n); if(!bagLabel[o.b]) o.b = BAGOF[o.a] || "hold"; }); }
@@ -967,6 +995,53 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
       .catch(function(){ toast("Couldn't send just now – try again in a minute"); })
       .then(function(){ $("fbsend").disabled = false; });
   });
+
+  // ---------- Sign in (optional): your list is saved to your account and opens on any device ----------
+  // One sign-in for all the Handy Little Tools sites (same Supabase project). Sharing links keep working as before.
+  var SITE = "packbybag", ATKEY = SITE + "-acct-t", asb = null, AUSER = null, apushT = null, acEmailV = "", aApplying = false;
+  function acctLib(cb){ if(asb) return cb();
+    var go = function(){ try{ asb = supabase.createClient(SB_URL, SB_KEY, {auth:{persistSession:true, autoRefreshToken:true, storageKey:"hlt-auth", detectSessionInUrl:false}});
+      asb.auth.onAuthStateChange(function(ev, sess){ AUSER = sess ? sess.user : null; acctUI(); }); cb(); }catch(e){ toast("Can't reach the server just now – try again in a minute"); } };
+    if(window.supabase) go(); else { var sc = document.createElement("script"); sc.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"; sc.onload = go; sc.onerror = function(){ toast("Can't reach the server just now – try again in a minute"); }; document.head.appendChild(sc); } }
+  function localT(){ try{ return +localStorage.getItem(ATKEY) || 0; }catch(e){ return 0; } }
+  function setLocalT(t){ try{ localStorage.setItem(ATKEY, String(t)); }catch(e){} }
+  function acctState(t){ var el = $("acState"); if(el) el.textContent = t; }
+  function acctPush(){ if(aApplying) return; setLocalT(Date.now()); if(!AUSER || !asb) return; clearTimeout(apushT); apushT = setTimeout(function(){
+    var raw; try{ raw = JSON.parse(localStorage.getItem(KEY) || "{}"); }catch(e){ raw = {}; }
+    acctState("Saving…"); asb.rpc("hlt_save", {p_site:SITE, p_data:{s:raw, t:localT()}}).then(function(res){ acctState(res.error ? "Saved on this phone – it'll save to your account when you're connected" : "✓ Saved to your account"); }); }, 1500); }
+  function acctPull(first){ if(!AUSER || !asb) return;
+    asb.rpc("hlt_get", {p_site:SITE}).then(function(res){ if(res.error) return acctState("Saved on this phone – it'll save to your account when you're connected");
+      var d = res.data, lt = localT();
+      if(d && d.s && (first || (d.t || 0) > lt)){ // just signed in: the list saved in your account wins
+        aApplying = true; try{ localStorage.setItem(KEY, JSON.stringify(d.s)); }catch(e){} setLocalT(d.t || Date.now()); load(); render(); aApplying = false; acctState("✓ Saved to your account"); }
+      else if(!d || lt > (d.t || 0)){ acctPush(); }
+      else acctState("✓ Saved to your account"); }); }
+  function acctUI(){ var b = $("acctBtn"); b.textContent = AUSER ? "✓ Signed in" : "Sign in"; b.classList.toggle("on", !!AUSER);
+    $("acOut").hidden = !!AUSER; $("acIn").hidden = !AUSER; if(AUSER) $("acWho").textContent = AUSER.email || ""; }
+  function acctOpen(){ $("acct").hidden = false; $("acStep1").hidden = false; $("acStep2").hidden = true; acctUI(); if(!AUSER) setTimeout(function(){ $("acEmail").focus(); }, 50); }
+  function acctClose(){ $("acct").hidden = true; }
+  $("acctBtn").addEventListener("click", acctOpen);
+  $("acX").addEventListener("click", acctClose);
+  $("acct").addEventListener("click", function(e){ if(e.target === this) acctClose(); });
+  $("acBack").addEventListener("click", function(){ $("acStep1").hidden = false; $("acStep2").hidden = true; });
+  function acSend(){ var em = $("acEmail").value.trim().toLowerCase(); if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ toast("Type your email address"); return; }
+    $("acSend").disabled = true; acctLib(function(){ asb.auth.signInWithOtp({email:em, options:{shouldCreateUser:true}}).then(function(res){ $("acSend").disabled = false;
+      if(res.error){ toast(/rate|seconds/i.test(res.error.message) ? "Please wait a minute before asking for another code" : "Couldn't send the code – check the email and try again"); return; }
+      acEmailV = em; $("acTo").textContent = em; $("acStep1").hidden = true; $("acStep2").hidden = false; $("acCode").value = ""; $("acCode").focus(); }, function(){ $("acSend").disabled = false; toast("Can't reach the server just now – try again in a minute"); }); }); }
+  function acGo(){ var code = $("acCode").value.replace(/\D/g, ""); if(code.length < 6){ toast("Type the code from the email"); return; }
+    $("acGo").disabled = true; asb.auth.verifyOtp({email:acEmailV, token:code, type:"email"}).then(function(res){ $("acGo").disabled = false;
+      if(res.error){ toast("That code didn't work – check it, or send a new one"); return; }
+      AUSER = res.data.user; acctUI(); acctClose(); toast("Signed in – your list is saved to your account"); acctPull(true); }, function(){ $("acGo").disabled = false; toast("Can't reach the server just now – try again in a minute"); }); }
+  $("acSend").addEventListener("click", acSend); $("acGo").addEventListener("click", acGo);
+  $("acEmail").addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); acSend(); } });
+  $("acCode").addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); acGo(); } });
+  $("acOutBtn").addEventListener("click", function(){ if(!asb) return; asb.auth.signOut().then(function(){ AUSER = null; acctUI(); acctClose(); toast("Signed out – your list stays on this phone"); }); });
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape" && !$("acct").hidden) acctClose(); });
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden && AUSER) acctPull(); });
+  // Already signed in on this device? Load the sign-in library and bring the list up to date.
+  (function(){ var has = false; try{ has = !!localStorage.getItem("hlt-auth"); }catch(e){}
+    if(has) acctLib(function(){ asb.auth.getSession().then(function(r){ AUSER = r.data && r.data.session ? r.data.session.user : null; acctUI(); acctPull(); }); }); })();
+
 })();
 </script>
 </body>
