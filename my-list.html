@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Grand Avenue (Berrylands, Surbiton) packing lists | PackbyBag</title>
-<meta name="description" content="Ready-made school packing lists for Grand Avenue in Berrylands, Surbiton: Grand Avenue – Year 1, Grand Avenue – Year 3.">
+<title>Your list | PackbyBag</title>
+<meta name="description" content="A list saved on PackbyBag, to tick off on your phone.">
 <meta name="theme-color" content="#1f5f73">
-<link rel="canonical" href="https://packbybag.com/lists/grand-avenue">
+<link rel="canonical" href="https://packbybag.com/my-list">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pack by Bag">
-<meta property="og:title" content="Grand Avenue (Berrylands, Surbiton) packing lists | PackbyBag">
-<meta property="og:description" content="Ready-made school packing lists for Grand Avenue in Berrylands, Surbiton: Grand Avenue – Year 1, Grand Avenue – Year 3.">
-<meta property="og:url" content="https://packbybag.com/lists/grand-avenue">
+<meta property="og:title" content="Your list | PackbyBag">
+<meta property="og:description" content="A list saved on PackbyBag, to tick off on your phone.">
+<meta property="og:url" content="https://packbybag.com/my-list">
 <meta property="og:image" content="https://packbybag.com/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f5f73'/%3E%3C/svg%3E">
@@ -80,13 +81,28 @@ ul.items.chk li::before{display:none}
 .done{margin:0 0 14px;padding:16px;border-radius:12px;background:#e3f3e9;border:1.5px solid #3f9a6b;text-align:center;font-weight:700;font-size:1.15rem;color:#1f5e3d}
 .done small{display:block;font-weight:400;font-size:.88rem;color:var(--muted);margin-top:2px}
 @media print{header .home,.go,.acts,.acts2,.prog,.done,footer,.crumbs{display:none}body{background:#fff}.card{border:0;padding:0}.tk[aria-pressed="true"]{color:var(--ink);text-decoration:none}.tk[aria-pressed="true"]::before{background:#fff;border-color:var(--main)}}
+.tk .tn{display:block;font-size:.85rem;color:var(--muted);text-decoration:none;font-weight:400}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header><a class="brand" href="/">Pack<span>by</span>Bag</a><a class="home" href="/">← PackbyBag home</a></header>
-<p class="crumbs"><a href="/">PackbyBag</a> › <a href="/lists/">Ready-made lists</a> › Grand Avenue</p>
-<h1>Grand Avenue packing lists</h1><p class="lead">Ready-made packing lists for Grand Avenue in Berrylands, Surbiton, sorted by bag. Open one, untick what you don't need, and tick things off as you pack.</p><p class="acts"><button type="button" data-copy="https://packbybag.com/lists/grand-avenue">Copy link to this page</button></p><div class="lists"><a class="gold" href="/lists/grand-avenue-year-1"><b>Grand Avenue – Year 1</b><small>A starter list for Year 1: book bag and reading record, PE kit on PE days, spare pants for the little ones.</small><span>40 things · by Destin</span></a><a class="gold" href="/lists/grand-avenue-year-3"><b>Grand Avenue – Year 3</b><small>A starter list for Year 3: reading and spellings, pencil case, PE and swim days.</small><span>58 things · by Sahara</span></a></div>
+<p class="crumbs"><a href="/">PackbyBag</a> › Your list</p>
+<h1 id="mlT">Your list</h1><p class="lead" id="mlL">Tick things off as you go – the ticks stay on this phone.</p>
+<p class="acts2"><button type="button" id="mlShare" data-share="">Share</button><button type="button" onclick="print()">Print</button></p>
+<div class="prog" id="prog" data-slug="my" data-daily="0"><div class="pbar"><i></i></div><div class="pt"><span class="pn">0 packed</span><button type="button" data-again="1" hidden>Start again</button></div></div>
+<div class="card" id="mlBody"></div>
+<div class="done" id="done" hidden>All packed! ⭐<small>Well done. Press Start again to use it next time.</small></div>
+<p class="lead" style="font-size:.88rem">This is a list someone saved on PackbyBag. Only people with this link can see it.</p>
+<script>
+(function(){ var d = null; try{ d = JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(1).replace(/-/g, "+").replace(/_/g, "/"))))); }catch(e){}
+  function $(i){ return document.getElementById(i); } function x(s){ var t = document.createElement("i"); t.textContent = s; return t.innerHTML.replace(/"/g, "&quot;"); }
+  if(!d || !d.g){ $("mlT").textContent = "This link looks incomplete"; $("mlL").textContent = "Ask the person who sent it to share it again."; $("mlBody").hidden = true; $("prog").hidden = true; $("mlShare").parentNode.hidden = true; return; }
+  $("mlT").textContent = d.n; document.title = d.n + " – checklist | PackbyBag";
+  $("prog").setAttribute("data-slug", "my-" + (d.i || d.n)); $("mlShare").setAttribute("data-share", location.href);
+  $("mlBody").innerHTML = d.g.map(function(g){ return "<h2>" + x(g[0]) + (g[1] ? " <small>– " + x(g[1]) + "</small>" : "") + "</h2><ul class=\"items chk\">"
+    + g[2].map(function(r){ return "<li><button class=\"tk\" type=\"button\" data-n=\"" + x(r[0] + (r[1] ? " – " + r[1] : "")) + "\" aria-pressed=\"false\"><span>" + x(r[0]) + (r[1] ? "<small class=\"tn\">" + x(r[1]) + "</small>" : "") + "</span></button></li>"; }).join("") + "</ul>"; }).join(""); })();
+</script>
 <footer>
 <p><a href="/"><b>PackbyBag</b></a> – a packing list sorted by bag, so nothing gets left behind. Free, no account needed.
 <a href="/">Start your own list</a> · <a href="/lists/">All ready-made lists</a></p>
