@@ -420,6 +420,17 @@ body.hasmic .sticky #q{padding-right:76px}
 body.hasmic #qClear{right:40px}
 /* Faint suitcase drawing at the top (in the margin on wide screens) */
 header{position:relative}header>*{position:relative;z-index:1}header::after{content:"";position:absolute;pointer-events:none;z-index:0;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20200%20190%22%20fill%3D%22none%22%20stroke%3D%22%231f5f73%22%20stroke-width%3D%223.2%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%0A%3Cpath%20d%3D%22M78%2040V26a8%208%200%200%201%208-8h28a8%208%200%200%201%208%208v14%22/%3E%0A%3Crect%20x%3D%2240%22%20y%3D%2240%22%20width%3D%22120%22%20height%3D%22124%22%20rx%3D%2216%22/%3E%0A%3Cpath%20d%3D%22M72%2040v124M128%2040v124%22/%3E%0A%3Cpath%20d%3D%22M40%2070h120%22%20stroke-dasharray%3D%222%207%22/%3E%0A%3Ccircle%20cx%3D%2260%22%20cy%3D%22176%22%20r%3D%227%22/%3E%3Ccircle%20cx%3D%22140%22%20cy%3D%22176%22%20r%3D%227%22/%3E%0A%3Cpath%20d%3D%22M160%2060c14%202%2022%2010%2024%2022%22/%3E%0A%3Cpath%20d%3D%22M176%2076l12%206-6%2014-12-6z%22/%3E%3Ccircle%20cx%3D%22181%22%20cy%3D%2285%22%20r%3D%221.6%22/%3E%0A%3Ccircle%20cx%3D%22100%22%20cy%3D%22112%22%20r%3D%2215%22/%3E%3Cpath%20d%3D%22M92%20112l6%206%2011-12%22/%3E%0A%3C/svg%3E") no-repeat center/contain}header::after{right:-6px;top:4px;width:120px;height:114px;opacity:.16}@media (min-width:600px) and (max-width:1079px){header::after{display:none}}@media (min-width:1080px){header::after{right:-150px;top:8px;width:120px;height:114px;opacity:.16;transform:none}}
+
+/* One row per item: the comment box opens only when you tap the speech bubble */
+#mine .mrow{flex-wrap:nowrap}
+#mine .mctl{flex:none;flex-wrap:nowrap}
+#mine .mctl .qc{display:none}
+#mine .mctl .cmt{flex:none;display:inline-flex;align-items:center;color:#9aa096;cursor:pointer;padding:4px 2px 4px 5px}
+#mine .mctl .cmt.has{color:var(--second, var(--purple))}
+#mine .mrow.editing{flex-wrap:wrap}
+#mine .mrow.editing .mctl{flex:1 1 100%;flex-wrap:wrap;justify-content:flex-end;row-gap:6px;padding-bottom:6px}
+#mine .mrow.editing .mctl .qc{display:block;order:9;flex:1 1 100%;height:32px;font-size:.92rem;margin:0}
+#mine .mrow .it .cnote,#mine .cnote{display:block;font-size:.8rem;color:var(--muted);font-weight:400;margin-top:1px}
 </style>
 </head>
 <body>
@@ -533,7 +544,7 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
   </div>
 </section>
 
-  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v50</span></p>
+  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v51</span></p>
 </div>
 </div>
 <div id="acct" hidden role="dialog" aria-modal="true" aria-labelledby="acTitle"><div class="acbox"><button class="acx" id="acX" type="button" aria-label="Close">×</button>
@@ -648,8 +659,8 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   var MV = '<span class="mv" role="button" title="Change bag" aria-label="Change bag"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h11M10 2.5l3 3-3 3"/><path d="M14 10.5H3M6 7.5l-3 3 3 3"/></svg></span>';
   function noteText(n){ var q = (S.qty || {})[n] || "", c = (S.note || {})[n] || "", parts = []; if(q && q !== "1") parts.push("× " + q); if(c) parts.push(c); return parts.join(" · "); }
   function noteTag(n){ var t = noteText(n); return t ? '<span class="qty">'+esc(t)+'</span>' : ''; }
-  function ctl(n, ref){ var q = parseInt((S.qty || {})[n], 10) || 1, c = (S.note || {})[n] || ""; return '<div class="mctl" '+ref+'><button type="button" class="qm" aria-label="One fewer"'+(q <= 1 ? ' disabled' : '')+'>&minus;</button><span class="qv" aria-label="Quantity">'+q+'</span><button type="button" class="qp" aria-label="One more">+</button><input class="qc" type="text" maxlength="60" value="'+esc(c)+'" aria-label="Comment">'+MV+RMV+'</div>'; }
-  function mineRow(n, ref, got, cls, b, k){ k = k || n; return '<div class="mrow'+(got?" got":"")+'"><button class="it'+cls+(got?" got":"")+'" '+ref+' aria-pressed="'+got+'"><span class="box"></span><span><span class="nm" data-done="'+doneWord(b)+'">'+esc(n)+'</span>'+(got ? noteTag(k) : '')+'</span></button>'+(got ? '' : ctl(k, ref))+'</div>'; }
+  function ctl(n, ref){ var q = parseInt((S.qty || {})[n], 10) || 1, c = (S.note || {})[n] || ""; return '<div class="mctl" '+ref+'><button type="button" class="qm" aria-label="One fewer"'+(q <= 1 ? ' disabled' : '')+'>&minus;</button><span class="qv" aria-label="Quantity">'+q+'</span><button type="button" class="qp" aria-label="One more">+</button><span class="cmt'+(c ? ' has' : '')+'" role="button" title="Add a comment" aria-label="Add a comment"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg></span><input class="qc" type="text" maxlength="60" value="'+esc(c)+'" aria-label="Comment" placeholder="Comment, e.g. the big one">'+MV+RMV+'</div>'; }
+  function mineRow(n, ref, got, cls, b, k){ k = k || n; return '<div class="mrow'+(got?" got":"")+'"><button class="it'+cls+(got?" got":"")+'" '+ref+' aria-pressed="'+got+'"><span class="box"></span><span><span class="nm" data-done="'+doneWord(b)+'">'+esc(n)+'</span>'+(got ? noteTag(k) : ''+((S.note || {})[k] ? '<small class="cnote">'+esc((S.note || {})[k])+'</small>' : '')+'')+'</span></button>'+(got ? '' : ctl(k, ref))+'</div>'; }
   function mineBtn(it){ return mineRow(it.n, 'data-n="'+esc(it.n)+'"', !!S.got[it.n], '', bagOf(it)); }
   function mineOwn(o, i){ return mineRow(o.n, 'data-own="'+i+'"', !!o.got, ' own', o.b, okey(o)); }
   function ctlKey(c){ if(c.dataset.own === undefined) return c.dataset.n; var o = S.own[+c.dataset.own]; return o ? okey(o) : ""; }
@@ -1099,6 +1110,11 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     r.onend = function(){ MICON = null; b.classList.remove("on"); try{ el.focus({preventScroll:true}); }catch(x){} };
     MICON = r; b.classList.add("on"); try{ r.start(); }catch(x){ MICON = null; b.classList.remove("on"); } }
   if(SR){ var qw = $("q").parentNode; qw.appendChild(micBtn($("q"), true)); document.body.classList.add("hasmic"); }
+
+
+  // Speech bubble: open a comment box under that one item; it closes again when you're done
+  $("mine").addEventListener("click", function(e){ var c = e.target.closest(".cmt"); if(!c) return; var row = c.closest(".mrow"); row.classList.add("editing"); var i = row.querySelector(".qc"); if(i){ i.focus(); var v = i.value; i.value = ""; i.value = v; } });
+  $("mine").addEventListener("focusout", function(e){ if(!e.target.classList || !e.target.classList.contains("qc")) return; setTimeout(function(){ render(); }, 120); });
 
   // ---------- My lists: save a list to use again (on this phone; signed in, it's also kept in your account) ----------
   var MKEY = "packbybag-mylists", MYL = [], MOPEN = "", MFORM = false;
