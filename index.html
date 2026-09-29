@@ -544,7 +544,7 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
   </div>
 </section>
 
-  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v51</span></p>
+  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v52</span></p>
 </div>
 </div>
 <div id="acct" hidden role="dialog" aria-modal="true" aria-labelledby="acTitle"><div class="acbox"><button class="acx" id="acX" type="button" aria-label="Close">×</button>
@@ -735,7 +735,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     return html;
   }
   function drawTrips(){
-    var card = function(t){ return '<button class="trip'+(t.by ? ' spon' : '')+'" type="button" data-trip="'+t.id+'">'+'<b>'+esc(t.name)+'</b><small>'+esc(t.blurb)+'</small>'+(t.by ? '<span class="spby"><span class="av" aria-hidden="true">★</span><span>by <b>'+esc(t.by)+'</b></span></span>' : '')+'<span class="n">'+t.items.length+' things · tap to see them</span></button>'; };
+    var card = function(t){ return '<button class="trip'+(t.by ? ' spon' : '')+'" type="button" data-trip="'+t.id+'">'+'<b>'+esc(t.name)+'</b><small>'+esc(t.blurb)+'</small>'+(t.by ? '<span class="spby"><span class="av" aria-hidden="true">★</span><span>by <b>'+esc(t.by)+'</b></span></span>' : '')+'<span class="n">'+t.items.length+' things · tap to open</span></button>'; };
     $("trips").innerHTML = '<p class="tgrp">Trips &amp; holidays</p>' + TRIPS.filter(function(t){ return t.group !== "school"; }).map(card).join("")
       + '<p class="tgrp">School bags <small>– by age, one per child if you like</small></p>' + TRIPS.filter(function(t){ return t.group === "school" && !t.named; }).map(card).join("")
       + '<p class="tgrp">Lists for particular schools</p>' + named();
@@ -893,7 +893,9 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
         if(S.picked[it.n]) return; n2++; S.picked[it.n] = 1; unpark(it.n); if(r.b && r.b !== it.b) S.bag[it.n] = r.b; });
       closePick(); save(); render(); openMine();
       toast(n2 ? (w ? w + ": " : t.name + ": ") + n2 + " added" : "All of those are on your list already"); } });
-  $("trips").addEventListener("click", function(e){ var b = e.target.closest(".trip"); if(b) openPick(b.dataset.trip); });
+  // A ready-made list opens as a page of its own (packbybag.com/lists/…) that works as a tick-off checklist; its "Add to my list" comes back here
+  $("trips").addEventListener("click", function(e){ var b = e.target.closest(".trip"); if(!b) return; var t = TRIPS.filter(function(x){ return x.id === b.dataset.trip; })[0];
+    if(!t || !t.slug){ openPick(b.dataset.trip); return; } try{ sessionStorage.setItem("packbybag-back", t.id); }catch(x){} location.href = "/lists/" + t.slug; });
   $("tripSuggest").addEventListener("click", function(){ var fx = $("feedback"); fx.hidden = false; $("fbBtn").setAttribute("aria-expanded", "true"); if(!$("fbtext").value) $("fbtext").value = "For the ready-made list \"" + "…" + "\" I'd add: "; fx.scrollIntoView({block:"start", behavior:"smooth"}); setTimeout(function(){ $("fbtext").focus(); }, 300); });
 
   function addToCat(key, v){
@@ -1091,6 +1093,10 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   $("listPick").addEventListener("click", function(e){ if(!e.target.closest("[data-picklink]") || !PICK) return; var u = "https://packbybag.com/lists/" + PICK.t.slug;
     if(navigator.clipboard) navigator.clipboard.writeText(u).then(function(){ toast("Link copied"); }, function(){ prompt("Copy this link:", u); }); else prompt("Copy this link:", u); });
   openFromLink(); window.addEventListener("hashchange", openFromLink);
+  // Coming back from a list page: reopen the ready-made lists where you left them
+  (function(){ var id; try{ id = sessionStorage.getItem("packbybag-back"); sessionStorage.removeItem("packbybag-back"); }catch(x){} if(!id || /[#&]list=/.test(location.hash)) return;
+    if($("tripBox").hidden) $("tripBtn").click(); var c = document.querySelector('.trip[data-trip="'+id+'"]'), d = c && c.closest("details"); while(d){ d.open = true; d = d.parentElement.closest("details"); }
+    if(c) setTimeout(function(){ c.scrollIntoView({block:"center"}); }, 30); })();
 
 
 

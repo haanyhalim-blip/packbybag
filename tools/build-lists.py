@@ -66,7 +66,29 @@ ul.items li.opt em{font-style:normal;font-size:.8rem;margin-left:auto}
 .lists a span{display:block;font-size:.78rem;color:var(--main);font-weight:700;margin-top:5px}
 footer{border-top:1px solid var(--line);margin-top:26px;padding-top:14px;font-size:.85rem;color:var(--muted)}
 footer a{color:var(--main-deep)}
-@media print{header .home,.go,.acts,footer,.crumbs{display:none}body{background:#fff}.card{border:0;padding:0}}
+/* the list page doubles as a tick-off checklist (hand the phone to a child and let them tick) */
+.acts2{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.acts2 a,.acts2 button{font:inherit;font-size:.9rem;font-weight:700;color:var(--main-deep);background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:7px 14px;text-decoration:none;cursor:pointer}
+.acts2 .add{background:var(--main);border-color:var(--main);color:#fff}
+.prog{position:sticky;top:0;z-index:3;background:var(--bg);padding:10px 0 10px;margin:0 0 4px}
+.pbar{height:12px;border-radius:99px;background:var(--wash);overflow:hidden}
+.prog.all .pbar i{background:linear-gradient(90deg,#e6be55,#c9971f)}
+.pbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#3f9a6b,#2f7d55);border-radius:99px;transition:width .3s}
+.pt{display:flex;justify-content:space-between;align-items:baseline;margin-top:5px;font-weight:700;color:var(--main-deep)}
+.pt button{font:inherit;font-size:.85rem;font-weight:400;color:var(--muted);background:none;border:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0}
+ul.items.chk li{padding:0}
+ul.items.chk li::before{display:none}
+.tk{font:inherit;font-size:1.08rem;color:var(--ink);background:none;border:0;width:100%;text-align:left;display:flex;align-items:center;gap:14px;padding:12px 2px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tk::before{content:"";flex:none;width:28px;height:28px;border:2.5px solid var(--main);border-radius:8px;background:#fff center/18px no-repeat}
+.tk[aria-pressed="true"]{color:var(--muted);text-decoration:line-through;text-decoration-thickness:2px}
+.tk[aria-pressed="true"]::before{background-color:#2f7d55;border-color:#2f7d55;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3.2 3L13 4.5' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.extras{margin:10px 0 0;border-top:1px solid var(--line);padding-top:6px}
+.extras summary{cursor:pointer;font-weight:700;color:var(--main-deep);padding:8px 0}
+.extras .tk{font-size:1rem;padding:9px 2px}
+.extras .tk::before{width:24px;height:24px;border-style:dashed}
+.done{margin:0 0 14px;padding:16px;border-radius:12px;background:#e3f3e9;border:1.5px solid #3f9a6b;text-align:center;font-weight:700;font-size:1.15rem;color:#1f5e3d}
+.done small{display:block;font-weight:400;font-size:.88rem;color:var(--muted);margin-top:2px}
+@media print{header .home,.go,.acts,.acts2,.prog,.done,footer,.crumbs{display:none}body{background:#fff}.card{border:0;padding:0}.tk[aria-pressed="true"]{color:var(--ink);text-decoration:none}.tk[aria-pressed="true"]::before{background:#fff;border-color:var(--main)}}
 """
 
 def page(path, title, desc, body, crumbs):
@@ -106,9 +128,23 @@ def page(path, title, desc, body, crumbs):
 </footer>
 </div>
 <script>
-document.addEventListener("click", function(ev){{ var b = ev.target.closest("[data-copy]"); if(!b) return; var u = b.getAttribute("data-copy");
+document.addEventListener("click", function(ev){{ var sh = ev.target.closest("[data-share]"); if(sh){{ var su = sh.getAttribute("data-share"), st = document.title;
+    if(navigator.share) navigator.share({{title: st, url: su}}).catch(function(){{}}); else if(navigator.clipboard) navigator.clipboard.writeText(su).then(function(){{ sh.textContent = "Link copied ✓"; setTimeout(function(){{ sh.textContent = "Share"; }}, 2200); }}, function(){{ prompt("Copy this link:", su); }}); else prompt("Copy this link:", su); return; }}
+  var b = ev.target.closest("[data-copy]"); if(!b) return; var u = b.getAttribute("data-copy");
   function done(){{ b.textContent = "Link copied ✓"; setTimeout(function(){{ b.textContent = "Copy link"; }}, 2200); }}
   if(navigator.clipboard) navigator.clipboard.writeText(u).then(done, function(){{ prompt("Copy this link:", u); }}); else prompt("Copy this link:", u); }});
+// Tick-off checklist: ticks stay on this phone. School lists start fresh each morning; trip lists keep their ticks until "Start again".
+(function(){{ var P = document.getElementById("prog"); if(!P) return; var slug = P.getAttribute("data-slug"), daily = P.getAttribute("data-daily") === "1", K = "packbybag-ticks";
+  var d = new Date(), today = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+  function all(){{ try{{ return JSON.parse(localStorage.getItem(K) || "{{}}") || {{}}; }}catch(e){{ return {{}}; }} }}
+  var me = all()[slug] || {{}}, T = (daily && me.d !== today) ? {{}} : (me.t || {{}});
+  function store(){{ var A = all(); if(Object.keys(T).length) A[slug] = {{d: today, t: T}}; else delete A[slug]; try{{ localStorage.setItem(K, JSON.stringify(A)); }}catch(e){{}} }}
+  function draw(){{ var n = 0, k = 0, any = false; document.querySelectorAll(".tk").forEach(function(b){{ var on = !!T[b.getAttribute("data-n")]; b.setAttribute("aria-pressed", String(on)); if(on) any = true; if(!b.closest(".extras")){{ n++; if(on) k++; }} }});
+    P.querySelector("i").style.width = (n ? Math.round(100 * k / n) : 0) + "%"; P.querySelector(".pn").textContent = n && k === n ? "All packed! ⭐" : k + " of " + n + " packed"; P.classList.toggle("all", !!n && k === n);
+    P.querySelector("[data-again]").hidden = !any; document.getElementById("done").hidden = !(n && k === n); }}
+  document.addEventListener("click", function(ev){{ var b = ev.target.closest(".tk"); if(b){{ var nm = b.getAttribute("data-n"); if(T[nm]) delete T[nm]; else T[nm] = 1; store(); draw(); return; }}
+    if(ev.target.closest("[data-again]")){{ T = {{}}; store(); draw(); window.scrollTo({{top: 0, behavior: "smooth"}}); }} }});
+  draw(); }})();
 </script>
 </body>
 </html>
@@ -142,14 +178,25 @@ for t in TRIPS:
     if t.get("by"):
         body.append(f'<div class="by"><span class="av" aria-hidden="true">★</span><span><small>A list by</small><b>{e(t["by"])}</b></span></div>')
     link = f'{SITE}/lists/{t["slug"]}'
-    body.append(f'<a class="go" href="/#list={e(t["slug"])}">Use this list in PackbyBag →</a>')
-    body.append(f'<p class="acts"><button type="button" data-copy="{e(link)}">Copy link</button><a href="https://wa.me/?text={e(urllib.parse.quote(t["name"] + " – " + link))}">Send on WhatsApp</a><a href="javascript:print()">Print</a></p>')
+    daily = "1" if t.get("group") == "school" else "0"
+    body.append(f'<p class="acts2"><a class="add" href="/#list={e(t["slug"])}">＋ Add to my list</a><button type="button" data-share="{e(link)}">Share</button><button type="button" onclick="print()">Print</button></p>')
+    body.append(f'<div class="prog" id="prog" data-slug="{e(t["slug"])}" data-daily="{daily}"><div class="pbar"><i></i></div><div class="pt"><span class="pn">0 packed</span><button type="button" data-again="1" hidden>Start again</button></div></div>')
     body.append('<div class="card">')
+    tk = lambda n: f'<li><button class="tk" type="button" data-n="{e(n)}" aria-pressed="false">{e(n)}</button></li>'
     for b, its in groups:
+        its = [n for n in its if n not in off]
+        if not its: continue
         sub = f' <small>– {e(b[2])}</small>' if b[2] else ""
-        lis = "".join(f'<li class="opt">{e(n)}<em>if needed</em></li>' if n in off else f"<li>{e(n)}</li>" for n in its)
-        body.append(f'<h2>{e(b[1])}{sub}</h2><ul class="items">{lis}</ul>')
+        body.append(f'<h2>{e(b[1])}{sub}</h2><ul class="items chk">{"".join(tk(n) for n in its)}</ul>')
+    extra = [(b, [n for n in its if n in off]) for b, its in groups]
+    extra = [(b, its) for b, its in extra if its]
+    if extra:
+        body.append(f'<details class="extras"><summary>Only if needed ({sum(len(i) for _, i in extra)})</summary>')
+        for b, its in extra:
+            body.append(f'<h2>{e(b[1])}</h2><ul class="items chk">{"".join(tk(n) for n in its)}</ul>')
+        body.append('</details>')
     body.append("</div>")
+    body.append('<div class="done" id="done" hidden>All packed! ⭐<small>' + ("Well done. It starts fresh again tomorrow." if daily == "1" else "Well done. Press Start again to use it next time.") + '</small></div>')
     crumbs = [("PackbyBag", "/"), ("Ready-made lists", "/lists/")]
     if t.get("named"):
         s = t.get("school") or t["name"]
