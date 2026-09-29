@@ -401,6 +401,19 @@ h2.aisle.rm .ah{color:var(--muted)}
 #myl .trip.mine{border-color:var(--second, var(--purple));background:var(--second-wash, #f4f4f4)}
 .trip.mkcard{border-style:dashed;border-width:1.5px}
 #myl[hidden]{display:none}
+#bagbar .bbrow{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:0 0 10px}
+#bagbar .bbl{font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:2px}
+#bagbar .bchip{font:inherit;font-size:.88rem;font-weight:700;cursor:pointer;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:5px 12px}
+#bagbar .bchip small{font-weight:400;color:var(--muted);margin-left:2px}
+#bagbar .bchip[aria-pressed="true"]{border-color:var(--main);background:var(--wash)}
+#bagbar .bchip.add{border-style:dashed;color:var(--main-deep)}
+#bagbar .bbform{margin:-2px 0 12px;padding:10px 12px;border:1.5px solid var(--main);border-radius:10px;background:var(--card);display:flex;flex-direction:column;gap:8px;font-size:.9rem}
+#bagbar .bbsug{display:flex;flex-wrap:wrap;gap:6px}
+#bagbar .bbin{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#bagbar .bbin input{flex:1 1 160px;font:inherit;padding:8px 10px;border:1.5px solid var(--line);border-radius:9px}
+#bagbar .bbform small{color:var(--muted)}
+#bagbar .del{color:var(--accent,#b5532a)}
+#bagbar .bbhint{margin:0 0 10px;font-size:.85rem;color:var(--muted)}
 #myl .mylsave{font:inherit;cursor:pointer;border:1.5px dashed var(--second, var(--purple));background:transparent;color:var(--second, var(--purple));border-radius:10px;padding:12px 13px;font-weight:700;text-align:left}
 #myl .mylnote{font-size:.85rem;color:var(--muted);margin:0}
 #myl .mylform{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px;border:1.5px solid var(--second, var(--purple));border-radius:10px;background:var(--card, #fff)}
@@ -480,6 +493,7 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
       <button class="hic clearic" id="clear" type="button" hidden title="Clear the whole list"><svg viewBox="0 0 16 16" width="20" height="20" aria-hidden="true"><circle cx="8" cy="8" r="6.4" fill="none" stroke="currentColor" stroke-width="1.7"/><line x1="3.7" y1="3.7" x2="12.3" y2="12.3" stroke="currentColor" stroke-width="1.7"/></svg><span class="cap">Clear</span></button>
     </div>
   <div id="mineBody">
+    <div id="bagbar"></div>
     <div id="mine"></div>
 <div id="shareBox" class="paste sharebox" hidden>
 <p><b>Share your list by bag.</b></p>
@@ -559,7 +573,7 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
   </div>
 </section>
 
-  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v56</span></p>
+  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v57</span></p>
 </div>
 </div>
 <div id="acct" hidden role="dialog" aria-modal="true" aria-labelledby="acTitle"><div class="acbox"><button class="acx" id="acX" type="button" aria-label="Close">×</button>
@@ -606,7 +620,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
 
 (function(){
   var KEY = "packbybag-v1";
-  var S = {picked:{}, got:{}, own:[], bag:{}, removed:[], qty:{}, note:{}};
+  var S = {picked:{}, got:{}, own:[], bag:{}, removed:[], qty:{}, note:{}, cbags:[]};
   var query = "";
   var OKEY = "packbybag-open-v1", OPEN = {docs:1};
   var BVKEY = "packbybag-browse-v1", BVIEW = "cat"; try{ BVIEW = localStorage.getItem(BVKEY) === "az" ? "az" : "cat"; }catch(e){}
@@ -615,6 +629,11 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   var esc = function(s){ return String(s).replace(/[&<>"]/g,function(c){ return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]; }); };
   var label = {}; CATS.forEach(function(a){ label[a[0]] = a[1]; });
   var bagLabel = {}; BAGS.forEach(function(b){ bagLabel[b[0]] = b[1]; });
+  // Your own bags (Carry-on 1, Checked bag 2 …) come first, then the usual sections. Things in a bag that no longer exists go back to their usual place.
+  var BASEBAGS = BAGS.slice();
+  function syncBags(){ S.cbags = S.cbags || []; BAGS = S.cbags.map(function(c){ return [c.k, c.n, ""]; }).concat(BASEBAGS);
+    Object.keys(bagLabel).forEach(function(k){ delete bagLabel[k]; }); BAGS.forEach(function(b){ bagLabel[b[0]] = b[1]; });
+    Object.keys(S.bag || {}).forEach(function(n){ if(!bagLabel[S.bag[n]]) delete S.bag[n]; }); (S.own || []).forEach(function(o){ if(!bagLabel[o.b]) o.b = "hold"; }); }
   var items = [], byNorm = {};
   CATS.forEach(function(c){ var a = c[0]; (CAT[a] || []).forEach(function(n){ var it = {n:n, a:a, b: BAGOF[n] || BAGOF[a] || "hold"}; items.push(it); byNorm[norm(n)] = it; }); });
   function bagOf(it){ return S.bag[it.n] || it.b; }
@@ -632,7 +651,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   function doneWord(b){ return b === "before" ? "done" : b === "there" ? "got it" : "packed"; }
 
   function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} if(typeof syncPush === "function") syncPush(); if(typeof acctPush === "function") acctPush(); }
-  function load(){ try{ var r = localStorage.getItem(KEY); if(r){ var v = JSON.parse(r); if(v && typeof v === "object"){ S.picked = v.picked || {}; S.got = v.got || {}; S.own = v.own || []; S.bag = v.bag || {}; S.removed = v.removed || []; S.qty = v.qty || {}; S.note = v.note || {}; } } }catch(e){}
+  function load(){ try{ var r = localStorage.getItem(KEY); if(r){ var v = JSON.parse(r); if(v && typeof v === "object"){ S.picked = v.picked || {}; S.got = v.got || {}; S.own = v.own || []; S.bag = v.bag || {}; S.removed = v.removed || []; S.qty = v.qty || {}; S.note = v.note || {}; S.cbags = v.cbags || []; } } }catch(e){} syncBags();
     try{ var o = localStorage.getItem(OKEY); if(o) OPEN = JSON.parse(o) || OPEN; }catch(e){}
     S.own.forEach(function(o){ if(!CATS.some(function(a){ return a[0] === o.a; })) o.a = classify(o.n); if(!bagLabel[o.b]) o.b = BAGOF[o.a] || "hold"; }); }
   function saveOpen(){ try{ localStorage.setItem(OKEY, JSON.stringify(OPEN)); }catch(e){} }
@@ -773,6 +792,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   function openMine(){ var mx = $("mineBody"); if(mx.hidden){ mx.hidden = false; $("mineBtn").setAttribute("aria-expanded", "true"); } var t = $("listSec").getBoundingClientRect().top + window.pageYOffset - 80; window.scrollTo({top: Math.max(0, t), behavior:"smooth"}); }
   function closeMine(){}
   function render(){
+    drawBags();
     $("mine").innerHTML = draw(true);
     $("out").innerHTML = draw(false);
     var p = nPicked();
@@ -828,6 +848,36 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     return out;
   }
   var unknown = [];
+  // ---------- Your own bags ----------
+  var BAGFORM = "";
+  function bagCount(k){ var n = 0; chosen().forEach(function(g){ if(g.key === k) n += g.rows.length; }); return n; }
+  function nextName(base){ var i = 1; while(S.cbags.some(function(c){ return c.n.toLowerCase() === (base + " " + i).toLowerCase(); })) i++; return base + " " + i; }
+  function drawBags(){ var el = $("bagbar"); if(!el) return; var has = nPicked() > 0 || S.cbags.length, h = "";
+    if(!has){ el.innerHTML = ""; return; }
+    h += '<div class="bbrow"><span class="bbl">Your bags</span>' + S.cbags.map(function(c){ var n = bagCount(c.k); return '<button type="button" class="bchip" data-bag="' + esc(c.k) + '" aria-pressed="' + (BAGFORM === c.k) + '">' + esc(c.n) + ' <small>' + n + '</small></button>'; }).join("")
+      + '<button type="button" class="bchip add" data-bagadd="1" aria-pressed="' + (BAGFORM === "add") + '">+ Add a bag</button></div>';
+    if(BAGFORM === "add"){ var sug = [nextName("Carry-on"), nextName("Checked bag"), nextName("Backpack"), "Handbag", "Kids’ case", "Suit carrier"].filter(function(x){ return !S.cbags.some(function(c){ return c.n.toLowerCase() === x.toLowerCase(); }); });
+      h += '<div class="bbform"><span>Tap one, or type your own name:</span><div class="bbsug">' + sug.map(function(x){ return '<button type="button" class="bchip sug" data-bagnew="' + esc(x) + '">' + esc(x) + '</button>'; }).join("") + '</div>'
+        + '<div class="bbin"><input id="bagName" maxlength="30" placeholder="e.g. Blue suitcase" autocomplete="off" enterkeyhint="done"><button class="btn primary" type="button" data-bagok="1">Add</button><button class="link quiet" type="button" data-bagx="1">Cancel</button></div></div>'; }
+    else if(BAGFORM){ var c0 = S.cbags.filter(function(c){ return c.k === BAGFORM; })[0];
+      if(c0) h += '<div class="bbform"><div class="bbin"><input id="bagName" maxlength="30" value="' + esc(c0.n) + '" autocomplete="off" enterkeyhint="done" aria-label="Bag name"><button class="btn primary" type="button" data-bagren="1">Rename</button><button class="link quiet del" type="button" data-bagdel="1">Delete bag</button><button class="link quiet" type="button" data-bagx="1">Close</button></div><small>To put things in it: tap ⋯ on an item, then Change bag.</small></div>'; }
+    else if(!S.cbags.length) h += '<p class="bbhint">Packing more than one case? Add your bags – e.g. Carry-on 1, Checked bag 2 – then tap ⋯ on an item and Change bag.</p>';
+    el.innerHTML = h; }
+  function addBag(name){ name = String(name || "").replace(/\s+/g, " ").trim().slice(0, 30); if(!name){ var i = $("bagName"); if(i) i.focus(); return; }
+    if(S.cbags.some(function(c){ return c.n.toLowerCase() === name.toLowerCase(); })){ toast("You already have “" + name + "”"); return; }
+    S.cbags.push({k: "u" + Date.now().toString(36), n: name}); BAGFORM = ""; syncBags(); save(); render(); toast("Added " + name + " – tap ⋯ on an item, then Change bag, to put things in it"); }
+  $("bagbar").addEventListener("click", function(e){ var b = e.target.closest("button"); if(!b) return;
+    if(b.dataset.bagadd){ BAGFORM = BAGFORM === "add" ? "" : "add"; drawBags(); if(BAGFORM) setTimeout(function(){ var i = $("bagName"); if(i) i.focus({preventScroll:true}); }, 30); return; }
+    if(b.dataset.bagnew){ addBag(b.dataset.bagnew); return; }
+    if(b.dataset.bagok){ addBag(($("bagName") || {}).value); return; }
+    if(b.dataset.bagx){ BAGFORM = ""; drawBags(); return; }
+    if(b.dataset.bag){ BAGFORM = BAGFORM === b.dataset.bag ? "" : b.dataset.bag; drawBags(); return; }
+    var c = S.cbags.filter(function(x){ return x.k === BAGFORM; })[0]; if(!c) return;
+    if(b.dataset.bagren){ var nn = (($("bagName") || {}).value || "").replace(/\s+/g, " ").trim().slice(0, 30); if(!nn) return; c.n = nn; BAGFORM = ""; syncBags(); save(); render(); toast("Renamed to " + nn); return; }
+    if(b.dataset.bagdel){ var n = bagCount(c.k); if(n && !confirm("Delete “" + c.n + "”? The " + n + (n === 1 ? " thing" : " things") + " in it go back to their usual bags.")) return;
+      var i = S.cbags.indexOf(c); S.cbags.splice(i, 1); BAGFORM = ""; syncBags(); save(); render(); toast("“" + c.n + "” deleted"); } });
+  $("bagbar").addEventListener("keydown", function(e){ if(e.key !== "Enter" || e.target.id !== "bagName") return; e.preventDefault(); if(BAGFORM === "add") addBag(e.target.value); else { var b = $("bagbar").querySelector("[data-bagren]"); if(b) b.click(); } });
+
   function askBag(names, change){
     if(!names.length) return; var one = names.length === 1;
     var cap = function(t){ return t.charAt(0).toUpperCase() + t.slice(1); };
@@ -1048,7 +1098,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   function rpc(fn, body){ return fetch(SB_URL + "/rest/v1/rpc/" + fn, {method:"POST", headers:sbHeaders(), body:JSON.stringify(body)}).then(function(r){ if(!r.ok) throw new Error("rpc " + r.status); return r.text(); }).then(function(t){ return t ? JSON.parse(t) : null; }); }
   function newCode(){ var a = "abcdefghjkmnpqrstuvwxyz23456789", o = "", c = new Uint32Array(12); (window.crypto || {}).getRandomValues ? crypto.getRandomValues(c) : c.forEach(function(_, i){ c[i] = Math.random() * 1e9; }); for(var i = 0; i < 12; i++) o += a[c[i] % a.length]; return "p" + o.slice(1); }
   function shareUrl(){ return "https://packbybag.com/#l=" + CODE; }
-  function snapshot(){ return JSON.stringify({picked:S.picked, got:S.got, own:S.own, bag:S.bag, removed:S.removed, qty:S.qty || {}, note:S.note || {}}); }
+  function snapshot(){ return JSON.stringify({picked:S.picked, got:S.got, own:S.own, bag:S.bag, removed:S.removed, qty:S.qty || {}, note:S.note || {}, cbags:S.cbags || []}); }
   var lastT = 0, BKEY = "packbybag-backup-v1";
   function countOf(d){ return Object.keys(d.picked || {}).length + (d.own || []).length; }
   function mergeInto(d){ var r = {picked:Object.assign({}, d.picked || {}, S.picked || {}), got:Object.assign({}, d.got || {}, S.got || {}), bag:Object.assign({}, d.bag || {}, S.bag || {}), qty:Object.assign({}, d.qty || {}, S.qty || {}), note:Object.assign({}, d.note || {}, S.note || {}), own:(d.own || []).slice(), removed:(d.removed || []).slice()};
@@ -1061,7 +1111,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     var j = JSON.stringify({picked:d.picked || {}, got:d.got || {}, own:d.own || [], bag:d.bag || {}, removed:d.removed || [], qty:d.qty || {}, note:d.note || {}}); if(j === snapshot()) return;
     var before = snapshot(), lost = here - there;
     try{ localStorage.setItem(BKEY, before); }catch(e){}
-    applying = true; S.picked = d.picked || {}; S.got = d.got || {}; S.own = d.own || []; S.bag = d.bag || {}; S.removed = d.removed || []; S.qty = d.qty || {}; S.note = d.note || {}; if(d.t) lastT = d.t; try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} lastSent = snapshot(); render(); applying = false;
+    applying = true; S.picked = d.picked || {}; S.got = d.got || {}; S.own = d.own || []; S.bag = d.bag || {}; S.removed = d.removed || []; S.qty = d.qty || {}; S.note = d.note || {}; S.cbags = d.cbags || []; syncBags(); if(d.t) lastT = d.t; try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} lastSent = snapshot(); render(); applying = false;
     if(merged){ lastSent = ""; syncPush(true); }
     if(!viaJoin && lost > 0){ toast("List updated from the shared link (" + lost + " fewer)", function(){ try{ var b = JSON.parse(before); applying = true; S.picked = b.picked || {}; S.got = b.got || {}; S.own = b.own || []; S.bag = b.bag || {}; S.removed = b.removed || []; S.qty = b.qty || {}; S.note = b.note || {}; applying = false; save(); render(); lastSent = ""; syncPush(true); }catch(e){} }); } }
   function syncPush(now){ if(!CODE || applying) return; clearTimeout(pushT); var go = function(){
@@ -1176,6 +1226,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     if(replace){ if("day" in S) d.day = S.day; n = snapCount(d); }
     else { var keys = {}; (cur.own || []).forEach(function(o){ keys[(o.w || "") + "|" + o.n.toLowerCase()] = 1; });
       Object.keys(d.picked || {}).forEach(function(k){ if(!(cur.picked || {})[k]){ cur.picked = cur.picked || {}; cur.picked[k] = 1; n++; } });
+      (d.cbags || []).forEach(function(c){ cur.cbags = cur.cbags || []; if(!cur.cbags.some(function(x){ return x.k === c.k; })) cur.cbags.push(c); });
       (d.own || []).forEach(function(o){ var k = (o.w || "") + "|" + o.n.toLowerCase(); if(!keys[k]){ cur.own = cur.own || []; cur.own.push(o); keys[k] = 1; n++; } });
       Object.keys(d).forEach(function(k){ var v = d[k]; if(k === "picked" || k === "own" || k === "got" || k === "removed" || !v || typeof v !== "object" || Array.isArray(v)) return; cur[k] = cur[k] || {}; Object.keys(v).forEach(function(x){ if(!(x in cur[k])) cur[k][x] = v[x]; }); });
       d = cur; }
@@ -1195,10 +1246,10 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     if(b.dataset.mydel){ var i = MYL.indexOf(m); MYL.splice(i, 1); MOPEN = ""; mySave(); drawMy(); toast("“" + m.name + "” deleted", function(){ MYL.splice(i, 0, m); mySave(); drawMy(); }); } });
   // A saved list as a tick-off page of its own (/my-list#…): the whole list travels in the link, so it opens on any phone you send it to
   function snapGroups(snap){ var keep = JSON.stringify(S), g = [];
-    try{ var v = JSON.parse(JSON.stringify(snap)); ["picked","got","own","org","removed","qty","note","mv","bag"].forEach(function(k){ if(k in S) S[k] = v[k] || (k === "own" || k === "removed" ? [] : {}); }); S.got = {};
+    try{ var v = JSON.parse(JSON.stringify(snap)); ["picked","got","own","org","removed","qty","note","mv","bag","cbags"].forEach(function(k){ if(k in S) S[k] = v[k] || (k === "own" || k === "removed" || k === "cbags" ? [] : {}); }); S.got = {}; syncBags();
       if(typeof applyMv === "function") applyMv();
       g = chosen().map(function(x){ return [(x.kid ? x.kid + " · " : "") + x.label, x.sub || "", x.rows.map(function(r){ var t = typeof noteText === "function" ? noteText(r.k || r.n) : ((S.note || {})[r.n] || ""); return t ? [r.n, t] : [r.n]; })]; });
-    } finally { var o = JSON.parse(keep); Object.keys(o).forEach(function(k){ S[k] = o[k]; }); if(typeof applyMv === "function") applyMv(); }
+    } finally { var o = JSON.parse(keep); Object.keys(o).forEach(function(k){ S[k] = o[k]; }); if(typeof applyMv === "function") applyMv(); syncBags(); }
     return g; }
   function myPageUrl(m){ var j = JSON.stringify({i: m.id, n: m.name, g: snapGroups(m.s)});
     return "/my-list#" + btoa(unescape(encodeURIComponent(j))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
