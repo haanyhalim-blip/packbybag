@@ -461,6 +461,9 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
 #mine .mrow.open .mctl .lbl{display:inline}
 #mine .mrow .it .cnote,#mine .cnote{display:block;font-size:.8rem;color:var(--muted);font-weight:400;margin-top:1px}
 #mineShare .cap:empty{display:none}
+.sendbox{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px;font-size:.92rem}
+.sendbox label{position:relative;cursor:pointer}
+.sendbox input[type=date]{position:absolute;inset:0;opacity:0;width:100%;cursor:pointer}
 </style>
 </head>
 <body>
@@ -505,7 +508,9 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
   <button class="btn" id="mail">Email</button>
   <button class="btn share" id="share" title="Share a link so someone else can edit this list with you">Share link</button>
   <button class="btn share" id="shareLink" type="button" title="Copy the link to this list">Copy link</button>
+  <button class="btn" id="sendTodo" type="button" title="Put this list on your DobyToday to-do list">✓ Send to my to-do list</button>
 </div>
+<div class="sendbox" id="sendBox" hidden><span>Put it on my to-do list for</span> <button class="btn" type="button" data-sday="0">Today</button> <button class="btn" type="button" data-sday="1">Tomorrow</button> <label class="link">another day<input type="date" id="sendDate"></label></div>
 <div class="shared" id="shared" hidden><input id="shareUrl" readonly aria-label="Link to this list" hidden><button class="link quiet" id="shareStop" type="button">Stop sharing</button></div>
 </div>
     <div class="dfoot">
@@ -560,7 +565,7 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
   </div>
 </section>
 
-  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v62</span></p>
+  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v63</span></p>
 </div>
 </div>
 <div id="acct" hidden role="dialog" aria-modal="true" aria-labelledby="acTitle"><div class="acbox"><button class="acx" id="acX" type="button" aria-label="Close">×</button>
@@ -1098,6 +1103,20 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     CODE = ""; try{ localStorage.removeItem(CKEY); }catch(e){} history.replaceState(null, "", location.pathname); if(chan){ try{ chan.unsubscribe(); }catch(e){} chan = null; } showShared(); }
   $("share").addEventListener("click", startShare);
   $("shareLink").addEventListener("click", sendLink);
+  // ---------- Send to DobyToday: the list goes on your to-do list as one job, with a link back to tick it off ----------
+  var OUTKEY = "packbybag-outbox";
+  function outLoad(){ try{ var o = JSON.parse(localStorage.getItem(OUTKEY) || "[]") || []; var cut = Date.now() - 21 * 864e5; return o.filter(function(x){ return x && x.t > cut; }); }catch(e){ return []; } }
+  function outMerge(list){ var o = outLoad(), ids = {}; o.forEach(function(x){ ids[x.i] = 1; }); (list || []).forEach(function(x){ if(x && x.i && !ids[x.i]){ o.push(x); ids[x.i] = 1; } }); try{ localStorage.setItem(OUTKEY, JSON.stringify(o)); }catch(e){} }
+  function isoDay(n){ var d = new Date(); d.setDate(d.getDate() + n); return d.getFullYear() + "-" + (d.getMonth() < 9 ? "0" : "") + (d.getMonth() + 1) + "-" + (d.getDate() < 10 ? "0" : "") + d.getDate(); }
+  function sendTodo(day){ var n = nPicked(); if(!n){ toast("Nothing on the list yet"); return; }
+    var id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    var x = {i:id, n:"Pack the bags (" + n + (n === 1 ? " thing)" : " things)"), l:"https://packbybag.com" + myPageUrl({id:"todo-" + id, name:"Packing list", s:mySnap()}), d:day, f:"PackbyBag", t:Date.now()};
+    outMerge([x]); if(typeof acctPush === "function") acctPush();   // signed in: it reaches DobyToday on your other phones too
+    var j = JSON.stringify({i:x.i, n:x.n, l:x.l, d:x.d, f:x.f}), b64 = btoa(unescape(encodeURIComponent(j))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    $("sendBox").hidden = true; window.open("https://dobytoday.com/#add=" + b64, "_blank", "noopener"); toast("Sent to your to-do list"); }
+  $("sendTodo").addEventListener("click", function(){ var o = $("sendBox").hidden; $("sendBox").hidden = !o; if(o){ $("sendDate").min = isoDay(1); } });
+  $("sendBox").addEventListener("click", function(e){ var b = e.target.closest("[data-sday]"); if(b) sendTodo(isoDay(+b.dataset.sday)); });
+  $("sendDate").addEventListener("change", function(){ if(this.value) sendTodo(this.value); });
   $("shareStop").addEventListener("click", stopShare);
   document.addEventListener("visibilitychange", function(){ if(!document.hidden) syncPull(); });
   window.addEventListener("focus", syncPull);
@@ -1242,10 +1261,10 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   function acctState(t){ var el = $("acState"); if(el) el.textContent = t; }
   function acctPush(){ if(aApplying) return; setLocalT(Date.now()); if(!AUSER || !asb) return; clearTimeout(apushT); apushT = setTimeout(function(){
     var raw; try{ raw = JSON.parse(localStorage.getItem(KEY) || "{}"); }catch(e){ raw = {}; }
-    acctState("Saving…"); asb.rpc("hlt_save", {p_site:SITE, p_data:{s:raw, t:localT(), m:myLoad()}}).then(function(res){ acctState(res.error ? "Saved on this phone – it'll save to your account when you're connected" : "✓ Saved to your account"); }); }, 1500); }
+    acctState("Saving…"); asb.rpc("hlt_save", {p_site:SITE, p_data:{s:raw, t:localT(), o:outLoad(), m:myLoad()}}).then(function(res){ acctState(res.error ? "Saved on this phone – it'll save to your account when you're connected" : "✓ Saved to your account"); }); }, 1500); }
   function acctPull(first){ if(!AUSER || !asb) return;
     asb.rpc("hlt_get", {p_site:SITE}).then(function(res){ if(res.error) return acctState("Saved on this phone – it'll save to your account when you're connected");
-      var d = res.data, lt = localT();
+      var d = res.data, lt = localT(); if(d && Array.isArray(d.o)) outMerge(d.o);
       var blank = !nPicked() && !(typeof myLoad === "function" && myLoad().length); // a new phone with nothing on it never overwrites your account
       if(d && d.s && (first || blank || (d.t || 0) > lt)){ // just signed in: the list saved in your account wins
         aApplying = true; try{ localStorage.setItem(KEY, JSON.stringify(d.s)); }catch(e){}
