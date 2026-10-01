@@ -464,6 +464,8 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
 .sendbox{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px;font-size:.92rem}
 .sendbox label{position:relative;cursor:pointer}
 .sendbox input[type=date]{position:absolute;inset:0;opacity:0;width:100%;cursor:pointer}
+.sharedone{display:flex;justify-content:flex-end;margin-top:12px}
+.shared .shon{display:block;font-size:.85rem;color:var(--muted);margin:8px 0 4px}
 </style>
 </head>
 <body>
@@ -511,7 +513,8 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
   <button class="btn" id="sendTodo" type="button" title="Put this list on your DobyToday to-do list">✓ Send to my to-do list</button>
 </div>
 <div class="sendbox" id="sendBox" hidden><span>Put it on my to-do list for</span> <button class="btn" type="button" data-sday="0">Today</button> <button class="btn" type="button" data-sday="1">Tomorrow</button> <label class="link">another day<input type="date" id="sendDate"></label></div>
-<div class="shared" id="shared" hidden><input id="shareUrl" readonly aria-label="Link to this list" hidden><button class="link quiet" id="shareStop" type="button">Stop sharing</button></div>
+<div class="shared" id="shared" hidden><input id="shareUrl" readonly aria-label="Link to this list" hidden><span class="shon">✓ Shared – anyone with the link sees your changes as you make them.</span><button class="link quiet" id="shareStop" type="button">Stop sharing</button></div>
+<div class="sharedone"><button class="btn primary" id="shareDone" type="button">Done</button></div>
 </div>
     <div class="dfoot">
       <span class="count" id="countWrap"><span id="count"></span><button class="link quiet" id="again" type="button" title="Untick everything but keep the list – handy for the school run" hidden>Untick all</button></span>
@@ -544,7 +547,7 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
   </div>
 </section>
 
-  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v64</span></p>
+  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v65</span></p>
 </div>
 </div>
 <div id="acct" hidden role="dialog" aria-modal="true" aria-labelledby="acTitle"><div class="acbox"><button class="acx" id="acX" type="button" aria-label="Close">×</button>
@@ -1034,6 +1037,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
     // The two tab buttons: opening one closes the other
     [["tripBtn","shopBtn"],["shopBtn","tripBtn"]].forEach(function(pr){ $(pr[0]).addEventListener("click", function(){ if($(pr[0]).getAttribute("aria-expanded") === "true"){ var o = $(pr[1]); $(o.getAttribute("aria-controls")).hidden = true; o.setAttribute("aria-expanded", "false"); } }); }); fold("fbBtn", "feedback"); fold("mineBtn", "mineBody");
     var sb = $("mineShare"), sx = $("shareBox");
+    $("shareDone").addEventListener("click", function(){ if(!sx.hidden) sb.click(); });
     sb.addEventListener("click", function(){ var open = sx.hidden; sx.hidden = !open; sb.setAttribute("aria-expanded", String(open)); sb.querySelector(".cap").textContent = open ? "Close" : ""; if(open) setTimeout(function(){ sx.scrollIntoView({block:"start", behavior:"smooth"}); }, 30); });
   })();
 
@@ -1078,7 +1082,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   function startShare(){ ensureShare(); if(navigator.share){ navigator.share({title:"Packing list", text:"Our list – add to it here:", url:shareUrl()}).catch(function(){}); return; } sendLink(); }
   function sendLink(){ ensureShare(); var u = $("shareUrl"); u.value = shareUrl();
     (navigator.clipboard ? navigator.clipboard.writeText(shareUrl()) : Promise.reject()).then(function(){ toast("Link copied"); }, function(){ u.hidden = false; u.focus(); u.select(); toast("Select the link and copy it"); }); }
-  function stopShare(){ if(!confirm("Stop sharing? Your list stays on this phone; the link stops updating it.")) return;
+  function stopShare(){ if(!confirm("Stop sharing this list?\n\nYou keep your list. The people you sent the link to will stop seeing your changes, and their changes won't reach you.")) return;
     CODE = ""; try{ localStorage.removeItem(CKEY); }catch(e){} history.replaceState(null, "", location.pathname); if(chan){ try{ chan.unsubscribe(); }catch(e){} chan = null; } showShared(); }
   $("share").addEventListener("click", startShare);
   $("shareLink").addEventListener("click", sendLink);
