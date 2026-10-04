@@ -197,7 +197,7 @@ for t in TRIPS:
         body.append('</details>')
     body.append("</div>")
     body.append('<div class="done" id="done" hidden>All packed! ⭐<small>' + ("Well done. It starts fresh again tomorrow." if daily == "1" else "Well done. Press Start again to use it next time.") + '</small></div>')
-    crumbs = [("PackbyBag", "/"), ("Ready-made lists", "/lists/")]
+    crumbs = [("PackbyBag", "/"), ("Ready-made packing lists", "/lists/")]
     if t.get("named"):
         s = t.get("school") or t["name"]
         crumbs.append((s, "/lists/" + school_slug[s]))
@@ -219,7 +219,7 @@ for s, ts in schools.items():
             '<div class="lists">' + "".join(card(t) for t in ts) + "</div>")
     open(os.path.join(out, sl + ".html"), "w", encoding="utf-8").write(
         page("lists/" + sl, f"{s}{' (' + area + ')' if area else ''} packing lists | PackbyBag", f"Ready-made school packing lists for {s}{where}: " + ", ".join(t["name"] for t in ts) + ".", body,
-             [("PackbyBag", "/"), ("Ready-made lists", "/lists/"), (s, None)]))
+             [("PackbyBag", "/"), ("Ready-made packing lists", "/lists/"), (s, None)]))
     pages.append("lists/" + sl)
 
 general = [t for t in TRIPS if not t.get("named")]
@@ -230,7 +230,7 @@ body = ('<h1>Ready-made packing lists</h1><p class="lead">Start from one of thes
             for a in sorted({next((t.get("area") for t in ts if t.get("area")), "") or "other areas" for ts in schools.values()})))
 open(os.path.join(out, "index.html"), "w", encoding="utf-8").write(
     page("lists/", "Ready-made packing lists | PackbyBag", "Free ready-made packing lists sorted by bag: holidays, work trips, events, school bags by age and lists for particular schools.", body,
-         [("PackbyBag", "/"), ("Ready-made lists", None)]))
+         [("PackbyBag", "/"), ("Ready-made packing lists", None)]))
 pages.insert(0, "lists/")
 
 
@@ -261,7 +261,7 @@ def build_my_list(site_name, word, daily):
 build_my_list("PackbyBag", "packed", False)
 
 today = datetime.date.today().isoformat()
-urls = [""] + pages
+urls = ["", "ai/"] + pages
 open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8").write(
     '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     + "".join(f"  <url>\n    <loc>{SITE}/{u}</loc>\n    <lastmod>{today}</lastmod>\n  </url>\n" for u in urls) + "</urlset>\n")
