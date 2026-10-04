@@ -225,7 +225,7 @@ for s, ts in schools.items():
 general = [t for t in TRIPS if not t.get("named")]
 body = ('<h1>Ready-made packing lists</h1><p class="lead">Start from one of these, untick what you don\'t need, and tick things off as you pack. Everything is sorted by bag.</p>'
         '<h2>Trips, holidays and school bags</h2><div class="lists">' + "".join(card(t) for t in general) + "</div>"
-        + "".join(f'<h2>Schools in {e(a)}</h2><div class="lists">' + "".join(
+        + "".join((f'<h2>Schools in {e(a)}</h2>' if a != "other areas" else '<h2>From our family – our children’s school bags</h2>') + '<div class="lists">' + "".join(
             f'<a class="gold" href="/lists/{school_slug[s]}"><b>{e(s)}</b><span>{len(ts)} list{"s" if len(ts) != 1 else ""}</span></a>' for s, ts in sorted(schools.items()) if (next((t.get("area") for t in ts if t.get("area")), "") or "other areas") == a) + "</div>"
             for a in sorted({next((t.get("area") for t in ts if t.get("area")), "") or "other areas" for ts in schools.values()})))
 open(os.path.join(out, "index.html"), "w", encoding="utf-8").write(
