@@ -512,7 +512,7 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
 
 <section id="listSec">
     <div class="lhead">
-      <div class="ltwrap"><h2 class="ltitle"><button class="sect mine" id="mineBtn" type="button" aria-expanded="true" aria-controls="mineBody"><span class="c"></span>My bags</button></h2><span class="htally" id="htally"></span></div>
+      <div class="ltwrap"><h2 class="ltitle"><button class="sect mine" id="mineBtn" type="button" aria-expanded="true" aria-controls="mineBody"><span class="c"></span>My current bags</button></h2><span class="htally" id="htally"></span></div>
       <button class="hic hshare" id="mineShare" type="button" aria-expanded="false" aria-controls="shareBox" title="Share this list"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.8l7.4-4.3M8.3 13.2l7.4 4.3"/></svg><span class="cap"></span></button>
       <button class="hic" id="mylSaveLink" type="button" hidden title="Save to My saved bags"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span class="cap">Save</span></button>
       <button class="hic clearic" id="clear" type="button" hidden title="Clear the whole list"><svg viewBox="0 0 16 16" width="20" height="20" aria-hidden="true"><circle cx="8" cy="8" r="6.4" fill="none" stroke="currentColor" stroke-width="1.7"/><line x1="3.7" y1="3.7" x2="12.3" y2="12.3" stroke="currentColor" stroke-width="1.7"/></svg><span class="cap">Clear</span></button>
@@ -569,7 +569,7 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
   </div>
 </section>
 
-  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v68</span></p>
+  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v69</span></p>
 </div>
 </div>
 <div id="acct" hidden role="dialog" aria-modal="true" aria-labelledby="acTitle"><div class="acbox"><button class="acx" id="acX" type="button" aria-label="Close">×</button>
@@ -750,7 +750,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
       Object.keys(byL).sort().forEach(function(L){
         var g = byL[L].sort(function(x, y){ return az(x.n, y.n); }); shown += g.length;
         var pk = g.filter(function(x){ return x.own || S.picked[x.it.n]; }).length, k = "_az_" + L, open = !!OPEN[k];
-        html += '<h2 class="aisle"><button class="ah" data-a="'+k+'" aria-expanded="'+open+'"><span class="c"></span>'+L+'<span class="n">'+(pk ? '<span class="golist" role="link" title="See these on My bags">'+pk+' on list · <u>View</u> ›</span>' : '')+'</span></button></h2><div class="grid"'+(open ? '' : ' hidden')+'>';
+        html += '<h2 class="aisle"><button class="ah" data-a="'+k+'" aria-expanded="'+open+'"><span class="c"></span>'+L+'<span class="n">'+(pk ? '<span class="golist" role="link" title="See these on My current bags">'+pk+' on list · <u>View</u> ›</span>' : '')+'</span></button></h2><div class="grid"'+(open ? '' : ' hidden')+'>';
         g.forEach(function(x){ html += x.own ? ownBtn(x.own, x.i, true) : itemBtn(x.it, true); });
         html += '</div>';
       });
@@ -763,7 +763,7 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
       shown += g.length + og.length;
       var pk = g.filter(function(it){ return S.picked[it.n]; }).length + og.length;
       var open = !!OPEN[a[0]];
-      html += '<h2 class="aisle"><button class="ah" data-a="'+a[0]+'" aria-expanded="'+open+'"><span class="c"></span>'+esc(a[1])+'<span class="n">'+(pk ? '<span class="golist" role="link" title="See these on My bags">'+pk+' on list · <u>View</u> ›</span>' : '')+'</span></button></h2><div class="grid"'+(open ? '' : ' hidden')+'>';
+      html += '<h2 class="aisle"><button class="ah" data-a="'+a[0]+'" aria-expanded="'+open+'"><span class="c"></span>'+esc(a[1])+'<span class="n">'+(pk ? '<span class="golist" role="link" title="See these on My current bags">'+pk+' on list · <u>View</u> ›</span>' : '')+'</span></button></h2><div class="grid"'+(open ? '' : ' hidden')+'>';
       html += '<div class="addrow" data-add="'+a[0]+'"><input placeholder="Search or add to '+esc(a[1])+'…" autocomplete="off" autocapitalize="off" enterkeyhint="done"><button class="btn primary" type="button">Add</button></div>';
       og.forEach(function(p){ html += ownBtn(p[0], p[1], false); });
       g.forEach(function(it){ html += itemBtn(it, false); });
