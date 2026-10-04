@@ -569,7 +569,7 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
   </div>
 </section>
 
-  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v69</span></p>
+  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v70</span></p>
 </div>
 </div>
 <div id="acct" hidden role="dialog" aria-modal="true" aria-labelledby="acTitle"><div class="acbox"><button class="acx" id="acX" type="button" aria-label="Close">×</button>
@@ -774,7 +774,10 @@ var TRIPS = [{"id":"family","name":"Family holiday with kids","blurb":"Sun, pool
   var TF = "all";   // which ready-made lists to show
   function drawTrips(){
     var card = function(t){ return '<button class="trip'+(t.by ? ' spon' : '')+'" type="button" data-trip="'+t.id+'">'+'<b>'+esc(t.name)+'</b><small>'+esc(t.blurb)+'</small>'+(t.by ? '<span class="spby"><span class="av" aria-hidden="true">★</span><span>by <b>'+esc(t.by)+'</b></span></span>' : '')+'<span class="n">'+t.items.length+' things · tap to open</span></button>'; };
-    var G = [["trips", "Trips & holidays", function(){ return '<p class="tgrp">Trips &amp; holidays</p>' + TRIPS.filter(function(t){ return t.group !== "school"; }).map(card).join(""); }],
+    // From our family: our children's real school bags, one folded row per child (first names only, no places)
+    var famG = function(){ var kids = [], by = {}; TRIPS.filter(function(t){ return t.named && t.by; }).forEach(function(t){ if(!by[t.by]){ by[t.by] = []; kids.push(t.by); } by[t.by].push(t); });
+      return '<p class="tgrp">🏠 From our family <small>– the bags our children actually take to school</small></p>' + kids.map(function(k){ return fold("kid", k + "’s bags", by[k].length + (by[k].length === 1 ? " list" : " lists"), by[k].map(card).join("")); }).join(""); };
+    var G = [["family", "From our family", famG], ["trips", "Trips & holidays", function(){ return '<p class="tgrp">Trips &amp; holidays</p>' + TRIPS.filter(function(t){ return t.group !== "school"; }).map(card).join(""); }],
       ["school", "School bags", function(){ return '<p class="tgrp">School bags <small>– by age, one per child if you like</small></p>' + TRIPS.filter(function(t){ return t.group === "school" && !t.named; }).map(card).join(""); }],
       // the lists for particular schools are kept (not shown): the age-based school bags cover them
       ["named", "Particular schools", function(){ return '<p class="tgrp">Lists for particular schools</p>' + named(); }, true]].filter(function(g){ return !g[3]; });
