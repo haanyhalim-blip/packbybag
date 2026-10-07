@@ -168,6 +168,15 @@ for f in os.listdir(out):
     if f.endswith(".html"): os.remove(os.path.join(out, f))   # only pages this script made
 pages = []
 
+# A renamed list keeps its old address working: lists/<old slug>.html forwards to the new page
+for t in TRIPS:
+    for o in t.get("old") or []:
+        new = f'{SITE}/lists/{t["slug"]}'
+        open(os.path.join(out, o + ".html"), "w", encoding="utf-8").write(
+            f'<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+            f'<title>{e(t["name"])} | PackbyBag</title><link rel="canonical" href="{new}"><meta http-equiv="refresh" content="0; url={new}"></head>'
+            f'<body><p>This list is now <a href="{new}">{e(t["name"])}</a>.</p></body></html>\n')
+
 for t in TRIPS:
     off = set(t.get("off") or [])
     groups = []
