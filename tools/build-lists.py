@@ -124,7 +124,7 @@ def page(path, title, desc, body, crumbs):
 <footer>
 <p><a href="/"><b>PackbyBag</b></a> – a packing list sorted by bag, so nothing gets left behind. Free, no account needed.
 <a href="/">Start your own list</a> · <a href="/lists/">All ready-made lists</a></p>
-<p>From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). {VER}</p>
+<p>From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">ResetbyChoice</a> (a page of your own to change a habit). {VER}</p>
 </footer>
 </div>
 <script>
