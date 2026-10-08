@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- PackbyBag v83 -->
+<!-- PackbyBag v84 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -500,6 +500,8 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
 .footlinks .aibar{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.footlinks .aibar .ailogo{margin:0}
 .mylinto{flex-basis:100%;margin:4px 0 2px;font-size:.88rem;line-height:1.7}
 .mylinto .link{font:inherit;font-weight:700;background:none;border:0;padding:0;color:inherit;text-decoration:underline;cursor:pointer}
+.chg-new{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chg-new input{flex:1 1 160px;min-width:0;font:inherit;padding:8px 10px;border:1.5px solid var(--line);border-radius:8px}
 </style>
 </head>
 <body>
@@ -584,7 +586,7 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
   </div>
 </section>
 
-  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v83</span></p>
+  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v84</span></p>
 </div>
 </div>
 <div id="acct" hidden role="dialog" aria-modal="true" aria-labelledby="acTitle"><div class="acbox"><button class="acx" id="acX" type="button" aria-label="Close">×</button>
@@ -915,7 +917,7 @@ var TRIPS = [{"id": "family", "name": "Family holiday with kids", "blurb": "Sun,
     if(change && one){
       var n0 = names[0], oi0 = S.own.findIndex(function(o){ return norm(okey(o)) === norm(n0); }), ci0 = oi0 < 0 ? byNorm[norm(n0)] : null; if(oi0 < 0 && !ci0) return;
       var curK = oi0 >= 0 ? S.own[oi0].b : bagOf(ci0), nm0 = oi0 >= 0 ? cap(okey(S.own[oi0])) : ci0.n;
-      var opts0 = BAGS.map(function(b){ return '<option value="' + b[0] + '"' + (b[0] === curK ? ' selected' : '') + '>' + b[1] + '</option>'; }).join("");
+      var opts0 = BAGS.map(function(b){ return '<option value="' + b[0] + '"' + (b[0] === curK ? ' selected' : '') + '>' + esc(b[1]) + '</option>'; }).join("") + '<option value="__new">+ New bag…</option>';
       $("sortMsg").innerHTML = '<b class="chg-t">Change bag</b><span class="chg-n">' + esc(nm0) + '</span>';
       $("sortRows").innerHTML = '<div class="chg"><div class="chg-r"><span class="chg-l">Current bag</span><span class="chg-v">' + esc(bagLabel[curK]) + '</span></div><div class="chg-r"><span class="chg-l">New bag</span><select ' + (oi0 >= 0 ? 'data-own="' + oi0 + '"' : 'data-n="' + esc(ci0.n) + '"') + ' aria-label="New bag">' + opts0 + '</select></div></div>';
       $("sortbox").hidden = false; $("sortRows").querySelector("select").focus(); return;
@@ -930,7 +932,22 @@ var TRIPS = [{"id": "family", "name": "Family holiday with kids", "blurb": "Sun,
     $("sortRows").querySelectorAll("select").forEach(function(sel){ if(sel.dataset.own !== undefined) sel.value = S.own[+sel.dataset.own].b; else sel.value = bagOf(byNorm[norm(sel.dataset.n)]); });
     $("sortbox").hidden = false; if(one) $("sortRows").querySelector("select").focus();
   }
+  // "+ New bag…" in Change bag: name a bag of your own right there, and the item goes straight into it
+  function moveTo(sel, k){ var cv = $("sortRows").querySelector(".chg-v");
+    if(sel.dataset.own !== undefined){ var o = S.own[+sel.dataset.own]; if(!o) return; o.b = k; toast(o.n + " moved to " + bagLabel[k]); }
+    else { var it = byNorm[norm(sel.dataset.n)]; if(!it) return; if(k === it.b) delete S.bag[it.n]; else S.bag[it.n] = k; toast(it.n + " moved to " + bagLabel[k]); }
+    if(cv) cv.textContent = bagLabel[k]; save(); render(); }
+  function chgNew(){ var sel = $("sortRows").querySelector("select"), inp = $("chgNew"); if(!sel || !inp) return; var name = inp.value.replace(/\s+/g, " ").trim().slice(0, 30); if(!name){ inp.focus(); return; }
+    var ex = BAGS.filter(function(b){ return b[1].toLowerCase() === name.toLowerCase(); })[0], k = ex ? ex[0] : "u" + Date.now().toString(36);
+    if(!ex){ S.cbags.push({k:k, n:name}); syncBags(); }
+    var opt = document.createElement("option"); opt.value = k; opt.textContent = name; if(!ex) sel.insertBefore(opt, sel.firstChild); sel.value = k;
+    var r = $("sortRows").querySelector(".chg-new"); if(r) r.remove(); moveTo(sel, k); }
+  $("sortRows").addEventListener("click", function(e){ if(e.target.closest("[data-chgnew]")) chgNew(); });
+  $("sortRows").addEventListener("keydown", function(e){ if(e.key === "Enter" && e.target.id === "chgNew"){ e.preventDefault(); chgNew(); } });
   $("sortRows").addEventListener("change", function(e){ var sel = e.target.closest("select"); if(!sel) return;
+    if(sel.value === "__new"){ var cur = $("sortRows").querySelector(".chg-v"), prev = BAGS.filter(function(b){ return cur && b[1] === cur.textContent; })[0]; sel.value = prev ? prev[0] : BAGS[0][0];
+      if(!$("chgNew")) sel.closest(".chg").insertAdjacentHTML("beforeend", '<div class="chg-r chg-new"><input id="chgNew" maxlength="30" placeholder="Name it – e.g. Sedona\'s blue case" autocomplete="off" enterkeyhint="done" aria-label="New bag name"><button class="btn primary" type="button" data-chgnew="1">Add</button></div>');
+      setTimeout(function(){ var i = $("chgNew"); if(i) i.focus(); }, 30); return; }
     var cv = $("sortRows").querySelector(".chg-v"), moved = cv ? " moved to " : " → ";
     if(sel.dataset.own !== undefined){ var o = S.own[+sel.dataset.own]; if(!o) return; o.b = sel.value; toast(o.n + moved + bagLabel[o.b]); }
     else { var it = byNorm[norm(sel.dataset.n)]; if(!it) return; if(sel.value === it.b) delete S.bag[it.n]; else S.bag[it.n] = sel.value; toast(it.n + moved + bagLabel[sel.value]); }
