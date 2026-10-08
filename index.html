@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- PackbyBag v81 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -575,7 +576,7 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
   </div>
 </section>
 
-  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v80</span></p>
+  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">DueAReset</a> (a page of your own to change a habit). <span class="ver">v81</span></p>
 </div>
 </div>
 <div id="acct" hidden role="dialog" aria-modal="true" aria-labelledby="acTitle"><div class="acbox"><button class="acx" id="acX" type="button" aria-label="Close">×</button>
@@ -634,7 +635,10 @@ var TRIPS = [{"id": "family", "name": "Family holiday with kids", "blurb": "Sun,
   var bagLabel = {}; BAGS.forEach(function(b){ bagLabel[b[0]] = b[1]; });
   // Your own bags (Carry-on 1, Checked bag 2 …) come first, then the usual sections. Things in a bag that no longer exists go back to their usual place.
   var BASEBAGS = BAGS.slice();
-  function syncBags(){ S.cbags = S.cbags || []; BAGS = S.cbags.map(function(c){ return [c.k, c.n, ""]; }).concat(BASEBAGS);
+  // S.cbags holds your own bags, and also new names for the standard bags ({k:"hold", n:"Blue case", base:true})
+  function bagRen(){ var r = {}; (S.cbags || []).forEach(function(c){ if(c.base) r[c.k] = c.n; }); return r; }
+  function ownBags(){ return (S.cbags || []).filter(function(c){ return !c.base; }); }
+  function syncBags(){ S.cbags = S.cbags || []; var ren = bagRen(); BAGS = ownBags().map(function(c){ return [c.k, c.n, ""]; }).concat(BASEBAGS.map(function(b){ return ren[b[0]] ? [b[0], ren[b[0]], ""] : b; }));
     Object.keys(bagLabel).forEach(function(k){ delete bagLabel[k]; }); BAGS.forEach(function(b){ bagLabel[b[0]] = b[1]; });
     Object.keys(S.bag || {}).forEach(function(n){ if(!bagLabel[S.bag[n]]) delete S.bag[n]; }); (S.own || []).forEach(function(o){ if(!bagLabel[o.b]) o.b = "hold"; }); }
   var items = [], byNorm = {};
@@ -863,16 +867,18 @@ var TRIPS = [{"id": "family", "name": "Family holiday with kids", "blurb": "Sun,
   var BAGFORM = "";
   function bagCount(k){ var n = 0; chosen().forEach(function(g){ if(g.key === k) n += g.rows.length; }); return n; }
   function nextName(base){ var i = 1; while(S.cbags.some(function(c){ return c.n.toLowerCase() === (base + " " + i).toLowerCase(); })) i++; return base + " " + i; }
-  function drawBags(){ var el = $("bagbar"); if(!el) return; var has = nPicked() > 0 || S.cbags.length, h = "";
-    if(!has){ el.innerHTML = ""; return; }
-    h += '<div class="bbrow"><span class="bbl">Your bags</span>' + S.cbags.map(function(c){ var n = bagCount(c.k); return '<button type="button" class="bchip" data-bag="' + esc(c.k) + '" aria-pressed="' + (BAGFORM === c.k) + '">' + esc(c.n) + ' <small>' + n + '</small></button>'; }).join("")
+  function drawBags(){ var el = $("bagbar"); if(!el) return; var h = "", ren = bagRen();
+    var shown = ownBags().map(function(c){ return [c.k, c.n]; }).concat(BASEBAGS.filter(function(b){ return bagCount(b[0]) || ren[b[0]]; }).map(function(b){ return [b[0], ren[b[0]] || b[1]]; }));   // your own bags, then the standard bags in use – tap any one to rename it
+    h += '<div class="bbrow"><span class="bbl">Your bags</span>' + shown.map(function(c){ var n = bagCount(c[0]); return '<button type="button" class="bchip" data-bag="' + esc(c[0]) + '" aria-pressed="' + (BAGFORM === c[0]) + '">' + esc(c[1]) + ' <small>' + n + '</small></button>'; }).join("")
       + '<button type="button" class="bchip add" data-bagadd="1" aria-pressed="' + (BAGFORM === "add") + '">+ Add a bag</button></div>';
     if(BAGFORM === "add"){ var sug = [nextName("Carry-on"), nextName("Checked bag"), nextName("Backpack"), "Handbag", "Kids’ case", "Suit carrier"].filter(function(x){ return !S.cbags.some(function(c){ return c.n.toLowerCase() === x.toLowerCase(); }); });
       h += '<div class="bbform"><span>Tap one, or type your own name:</span><div class="bbsug">' + sug.map(function(x){ return '<button type="button" class="bchip sug" data-bagnew="' + esc(x) + '">' + esc(x) + '</button>'; }).join("") + '</div>'
         + '<div class="bbin"><input id="bagName" maxlength="30" placeholder="e.g. Blue suitcase" autocomplete="off" enterkeyhint="done"><button class="btn primary" type="button" data-bagok="1">Add</button><button class="link quiet" type="button" data-bagx="1">Cancel</button></div></div>'; }
-    else if(BAGFORM){ var c0 = S.cbags.filter(function(c){ return c.k === BAGFORM; })[0];
+    else if(BAGFORM && BASEBAGS.some(function(b){ return b[0] === BAGFORM; })){ var bb = BASEBAGS.filter(function(b){ return b[0] === BAGFORM; })[0];
+      h += '<div class="bbform"><span>Give this bag your own name:</span><div class="bbin"><input id="bagName" maxlength="30" value="' + esc(ren[bb[0]] || bb[1]) + '" placeholder="' + esc(bb[1]) + '" autocomplete="off" enterkeyhint="done" aria-label="Bag name"><button class="btn primary" type="button" data-bagren="1">Rename</button>' + (ren[bb[0]] ? '<button class="link quiet" type="button" data-bagreset="1">Back to “' + esc(bb[1]) + '”</button>' : '') + '<button class="link quiet" type="button" data-bagx="1">Close</button></div></div>'; }
+    else if(BAGFORM){ var c0 = S.cbags.filter(function(c){ return c.k === BAGFORM && !c.base; })[0];
       if(c0) h += '<div class="bbform"><div class="bbin"><input id="bagName" maxlength="30" value="' + esc(c0.n) + '" autocomplete="off" enterkeyhint="done" aria-label="Bag name"><button class="btn primary" type="button" data-bagren="1">Rename</button><button class="link quiet del" type="button" data-bagdel="1">Delete bag</button><button class="link quiet" type="button" data-bagx="1">Close</button></div><small>To put things in it: tap ⋯ on an item, then Change bag.</small></div>'; }
-    else if(!S.cbags.length) h += '<p class="bbhint">Packing more than one case? Add your bags – e.g. Carry-on 1, Checked bag 2 – then tap ⋯ on an item and Change bag.</p>';
+    else h += '<p class="bbhint">' + (shown.length ? 'Tap a bag to give it your own name. ' : '') + 'Packing more than one case? Tap + Add a bag – e.g. Carry-on 1, Checked bag 2 – then tap ⋯ on an item and Change bag.</p>';
     el.innerHTML = h; }
   function addBag(name){ name = String(name || "").replace(/\s+/g, " ").trim().slice(0, 30); if(!name){ var i = $("bagName"); if(i) i.focus(); return; }
     if(S.cbags.some(function(c){ return c.n.toLowerCase() === name.toLowerCase(); })){ toast("You already have “" + name + "”"); return; }
@@ -883,7 +889,13 @@ var TRIPS = [{"id": "family", "name": "Family holiday with kids", "blurb": "Sun,
     if(b.dataset.bagok){ addBag(($("bagName") || {}).value); return; }
     if(b.dataset.bagx){ BAGFORM = ""; drawBags(); return; }
     if(b.dataset.bag){ BAGFORM = BAGFORM === b.dataset.bag ? "" : b.dataset.bag; drawBags(); return; }
-    var c = S.cbags.filter(function(x){ return x.k === BAGFORM; })[0]; if(!c) return;
+    var base = BASEBAGS.filter(function(x){ return x[0] === BAGFORM; })[0];
+    if(base){ var ix = -1; S.cbags.forEach(function(x, i){ if(x.base && x.k === base[0]) ix = i; });
+      if(b.dataset.bagreset){ if(ix > -1) S.cbags.splice(ix, 1); BAGFORM = ""; syncBags(); save(); render(); toast("Back to “" + base[1] + "”"); return; }
+      if(b.dataset.bagren){ var bn = (($("bagName") || {}).value || "").replace(/\s+/g, " ").trim().slice(0, 30); if(!bn) return;
+        if(bn.toLowerCase() === base[1].toLowerCase()){ if(ix > -1) S.cbags.splice(ix, 1); } else if(ix > -1) S.cbags[ix].n = bn; else S.cbags.push({k:base[0], n:bn, base:true});
+        BAGFORM = ""; syncBags(); save(); render(); toast("Renamed to " + bn); } return; }
+    var c = S.cbags.filter(function(x){ return x.k === BAGFORM && !x.base; })[0]; if(!c) return;
     if(b.dataset.bagren){ var nn = (($("bagName") || {}).value || "").replace(/\s+/g, " ").trim().slice(0, 30); if(!nn) return; c.n = nn; BAGFORM = ""; syncBags(); save(); render(); toast("Renamed to " + nn); return; }
     if(b.dataset.bagdel){ var n = bagCount(c.k); if(n && !confirm("Delete “" + c.n + "”? The " + n + (n === 1 ? " thing" : " things") + " in it go back to their usual bags.")) return;
       var i = S.cbags.indexOf(c); S.cbags.splice(i, 1); BAGFORM = ""; syncBags(); save(); render(); toast("“" + c.n + "” deleted"); } });
