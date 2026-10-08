@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- PackbyBag v94 -->
+<!-- PackbyBag v95 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -531,6 +531,16 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
 .bwy .bwyb .bwyh{margin:0 28px 8px 0;font-weight:800;font-size:1.05rem;color:var(--ink,#222)}
 .bwyx{position:absolute;right:8px;top:6px;border:0;background:none;font-size:1.5rem;line-height:1;cursor:pointer;color:var(--muted,#777)}
 .bwy .bwysi{font:inherit;font-weight:700;background:none;border:0;padding:0;color:inherit;text-decoration:underline;cursor:pointer}
+
+/* Ready-made list picker: change a thing (✎) or add your own before adding */
+#listPick .pkrow{display:flex;align-items:center;gap:4px}
+#listPick .pkrow .it{flex:1;min-width:0}
+#listPick .pken{flex:none;width:32px;height:32px;border:0;background:none;color:var(--muted);cursor:pointer;font-size:1rem;border-radius:8px}
+#listPick .pextra{margin:10px 0 4px;display:flex;flex-wrap:wrap;gap:6px}
+#listPick .pxi{display:inline-flex;align-items:center;gap:4px;border:1.5px solid var(--line);border-radius:999px;padding:3px 4px 3px 10px;font-size:.9rem;background:var(--card)}
+#listPick .pxi button{border:0;background:none;cursor:pointer;color:var(--muted);font-size:1rem}
+#listPick .pxin{display:flex;gap:6px;flex:1 1 100%}
+#listPick .pxin input{flex:1;min-width:0;font:inherit;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px}
 </style>
 </head>
 <body>
@@ -636,7 +646,7 @@ header{position:relative}header>*{position:relative;z-index:1}header::after{cont
   </div>
 </section>
 
-  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">ResetbyChoice</a> (a page of your own to change a habit). <span class="ver">v94</span></p>
+  <p class="tiny">From Handy Little Tools – also try <a href="https://listbyaisle.com/">ListbyAisle</a> (a shopping list sorted by aisle), <a href="https://dobytoday.com/">DobyToday</a> (today’s jobs, sorted by when) and <a href="https://dueareset.com/">ResetbyChoice</a> (a page of your own to change a habit). <span class="ver">v95</span></p>
 </div>
 </div>
 <div id="acct" hidden role="dialog" aria-modal="true" aria-labelledby="acTitle"><div class="acbox"><button class="acx" id="acX" type="button" aria-label="Close">×</button>
@@ -1032,19 +1042,22 @@ var TRIPS = [{"id": "family", "name": "Family holiday with kids", "blurb": "Sun,
     BAGS.forEach(function(b){ if(by[b[0]]) out.push({label:b[1], rows:by[b[0]]}); });
     return out; }
   function openPick(id){ var t = TRIPS.filter(function(x){ return x.id === id; })[0]; if(!t) return; closePick();
-    var rows = t.items.map(function(nm){ var it = byNorm[norm(nm)]; return it ? {n:it.n, b:tripBag(t, it)} : null; }).filter(Boolean);
+    var rows = t.items.map(function(nm){ var it = byNorm[norm(nm)]; return it ? {n:it.n, b:tripBag(t, it)} : {n:nm, own:1, b:(t.bags || {})[nm] || "hold"}; });   // things not in the catalogue still come through, as your own
     var off = {}; (t.off || []).forEach(function(nm){ var it = byNorm[norm(nm)]; if(it) off[it.n] = 1; });
     var ks = kidsOn();
-    PICK = {t:t, rows:rows, off:off, who: t.group === "school" && ks.length === 1 ? ks[0] : ""}; drawPick(); document.querySelectorAll(".trip.on").forEach(function(x){ x.classList.remove("on"); }); var card = document.querySelector('.trip[data-trip="'+id+'"]'); if(card) card.classList.add("on"); $("listPick").scrollIntoView({block:"start", behavior:"smooth"}); }
+    PICK = {t:t, rows:rows, off:off, ren:{}, extra:[], who: t.group === "school" && ks.length === 1 ? ks[0] : ""}; drawPick(); document.querySelectorAll(".trip.on").forEach(function(x){ x.classList.remove("on"); }); var card = document.querySelector('.trip[data-trip="'+id+'"]'); if(card) card.classList.add("on"); $("listPick").scrollIntoView({block:"start", behavior:"smooth"}); }
+  function pickOwn(quiet){ var i = $("pickOwn"); if(!i || !PICK) return; var v = i.value.replace(/\s+/g, " ").trim(); if(!v) return; PICK.extra.push(v); if(!quiet){ drawPick(); var j = $("pickOwn"); if(j) j.focus(); } }
+  $("listPick").addEventListener("keydown", function(e){ if(e.target.id === "pickOwn" && e.key === "Enter"){ e.preventDefault(); pickOwn(); } });
   function closePick(){ if(!PICK) return; document.querySelectorAll(".trip.on").forEach(function(x){ x.classList.remove("on"); }); $("listPick").hidden = true; $("listPick").innerHTML = ""; PICK = null; }
   function pickAddText(on){ var w = kidName(PICK.who); return "Add " + on + (w ? " to " + w + "’s bags" : " to my list"); }
   function drawPick(){ var on = PICK.rows.filter(function(r){ return !PICK.off[r.n]; }).length, box = $("listPick"), school = PICK.t.group === "school";
     var who = school ? '<div class="pwho"><label for="pickWho">Who is it for?</label><input id="pickWho" type="text" maxlength="20" autocomplete="off" placeholder="Child’s name (optional)" value="'+esc(PICK.who)+'">'
       + kidsOn().map(function(k){ return '<button type="button" class="kidchip" data-who="'+esc(k)+'" aria-pressed="'+(kidName(PICK.who) === k)+'">'+esc(k)+'</button>'; }).join("")
       + '<small>Add a name and they get their own section on the list, so each child’s things stay separate.</small></div>' : '';
-    box.innerHTML = (PICK.t.by ? '<div class="spban"><span class="spby" style="margin:0"><span class="av" aria-hidden="true">★</span></span><span class="spt"><span class="spk">A list by</span><b>'+esc(PICK.t.by)+'</b>'+(PICK.t.note ? '<q>'+esc(PICK.t.note)+'</q>' : '')+'</span></div>' : '') + '<div class="phead"><span class="pk">Choose what to add from</span><b>'+esc(PICK.t.name)+'</b><span class="plink"><a href="/lists/'+esc(PICK.t.slug)+'">This list’s own page</a> · <button class="link" type="button" data-picklink="1">Copy link</button></span><small>'+(PICK.t.off ? 'The usual things are ticked – tick the extras they need, untick what they don’t, then press Add.' : 'Everything is ticked – untick what you don’t need, then press Add.')+'</small></div>' + who + '<div class="grid">'
-      + pickGroups(PICK.rows).map(function(g){ return '<div class="pgrp">'+esc(g.label)+'</div>' + g.rows.map(function(r){ var k = !PICK.off[r.n]; return '<button class="it" type="button" data-pick="'+esc(r.n)+'" aria-pressed="'+k+'"><span class="box"></span><span><span class="nm">'+esc(r.n)+'</span></span></button>'; }).join(""); }).join("")
-      + '</div><div class="prow"><button class="btn primary" type="button" data-pickadd="1">'+esc(pickAddText(on))+'</button><button class="link quiet" type="button" data-pickall="1">'+(on === PICK.rows.length ? 'Untick all' : 'Tick all')+'</button><button class="link quiet" type="button" data-pickclose="1">Cancel</button></div>';
+    box.innerHTML = (PICK.t.by ? '<div class="spban"><span class="spby" style="margin:0"><span class="av" aria-hidden="true">★</span></span><span class="spt"><span class="spk">A list by</span><b>'+esc(PICK.t.by)+'</b>'+(PICK.t.note ? '<q>'+esc(PICK.t.note)+'</q>' : '')+'</span></div>' : '') + '<div class="phead"><span class="pk">Choose what to add from</span><b>'+esc(PICK.t.name)+'</b><span class="plink"><a href="/lists/'+esc(PICK.t.slug)+'">This list’s own page</a> · <button class="link" type="button" data-picklink="1">Copy link</button></span><small>'+(PICK.t.off ? 'The usual things are ticked – tick the extras they need, untick what they don’t, tap ✎ to change something, or add your own – then press Add.' : 'Everything is ticked – untick what you don’t need, tap ✎ to change something, or add your own – then press Add.')+'</small></div>' + who + '<div class="grid">'
+      + pickGroups(PICK.rows).map(function(g){ return '<div class="pgrp">'+esc(g.label)+'</div>' + g.rows.map(function(r){ var k = !PICK.off[r.n]; return '<div class="pkrow"><button class="it" type="button" data-pick="'+esc(r.n)+'" aria-pressed="'+k+'"><span class="box"></span><span><span class="nm">'+esc(PICK.ren[r.n] || r.n)+'</span></span></button><button type="button" class="pken" data-pickren="'+esc(r.n)+'" aria-label="Change this">✎</button></div>'; }).join(""); }).join("")
+      + '</div><div class="pextra">' + PICK.extra.map(function(x, i){ return '<span class="pxi">' + esc(x) + '<button type="button" data-pickxx="' + i + '" aria-label="Remove">×</button></span>'; }).join("")
+      + '<div class="pxin"><input id="pickOwn" maxlength="80" placeholder="Add your own – e.g. Spare charger" aria-label="Add your own"><button type="button" class="btn" data-pickown="1">Add</button></div></div><div class="prow"><button class="btn primary" type="button" data-pickadd="1">'+esc(pickAddText(on))+'</button><button class="link quiet" type="button" data-pickall="1">'+(on === PICK.rows.length ? 'Untick all' : 'Tick all')+'</button><button class="link quiet" type="button" data-pickclose="1">Cancel</button></div>';
     box.hidden = false; }
   $("listPick").addEventListener("input", function(e){ if(!PICK || e.target.id !== "pickWho") return; var was = !!kidName(PICK.who); PICK.who = e.target.value;
     if(was !== !!kidName(PICK.who)){ var at = e.target.selectionStart; drawPick(); var i = $("pickWho"); i.focus(); try{ i.setSelectionRange(at, at); }catch(x){} return; }
@@ -1055,9 +1068,15 @@ var TRIPS = [{"id": "family", "name": "Family holiday with kids", "blurb": "Sun,
     if(e.target.closest("[data-pickclose]")){ closePick(); return; }
     var wc = e.target.closest("[data-who]"); if(wc){ PICK.who = kidName(PICK.who) === wc.dataset.who ? "" : wc.dataset.who; drawPick(); return; }
     if(e.target.closest("[data-pickall]")){ var all = PICK.rows.every(function(r){ return !PICK.off[r.n]; }); PICK.off = {}; if(all) PICK.rows.forEach(function(r){ PICK.off[r.n] = 1; }); drawPick(); return; }
+    var rn = e.target.closest("[data-pickren]"); if(rn){ var o0 = rn.dataset.pickren, v = prompt("Change this to:", PICK.ren[o0] || o0); if(v != null){ v = v.replace(/\s+/g, " ").trim(); if(v && v !== o0) PICK.ren[o0] = v; else delete PICK.ren[o0]; delete PICK.off[o0]; drawPick(); } return; }
+    var xx = e.target.closest("[data-pickxx]"); if(xx){ PICK.extra.splice(+xx.dataset.pickxx, 1); drawPick(); return; }
+    if(e.target.closest("[data-pickown]")){ pickOwn(); return; }
     var b = e.target.closest("[data-pick]"); if(b){ var n = b.dataset.pick; if(PICK.off[n]) delete PICK.off[n]; else PICK.off[n] = 1; drawPick(); return; }
-    if(e.target.closest("[data-pickadd]")){ var n2 = 0, t = PICK.t, w = kidName(PICK.who);
+    if(e.target.closest("[data-pickadd]")){ var n2 = 0, t = PICK.t, w = kidName(PICK.who); pickOwn(true);
+      var addOwn = function(nm, a, bg){ var o = {n:nm, a:a || "other", b:w ? kidBag(bg || "hold") : (bg || "hold"), got:false}; if(w) o.w = w; if(!hasOwn(okey(o))){ S.own.push(o); n2++; } unpark(okey(o)); };
+      PICK.extra.forEach(function(x){ var hit = find(x); if(hit && !w){ if(!S.picked[hit.n]){ n2++; S.picked[hit.n] = 1; unpark(hit.n); } } else addOwn(hit ? hit.n : x, hit ? hit.a : "", hit ? hit.b : ""); });
       PICK.rows.forEach(function(r){ if(PICK.off[r.n]) return; var it = byNorm[norm(r.n)];
+        if(!it || PICK.ren[r.n]){ addOwn(PICK.ren[r.n] || r.n, it ? it.a : "", r.b || (it && it.b)); return; }   // changed or not in the catalogue: it goes on as your own, in the same bag
         if(w){ var o = {n:it.n, a:it.a, b:kidBag(r.b || it.b), got:false, w:w}; if(!hasOwn(okey(o))){ S.own.push(o); n2++; } unpark(okey(o)); return; }
         if(S.picked[it.n]) return; n2++; S.picked[it.n] = 1; unpark(it.n); if(r.b && r.b !== it.b) S.bag[it.n] = r.b; });
       closePick(); save(); render(); openMine();
